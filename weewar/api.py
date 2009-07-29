@@ -125,10 +125,10 @@ def _call_api(url, username=None, password=None):
         req.add_header("Authorization", "Basic %s" % base64string)
 
     handle = urllib2.urlopen(req)
-    #return objectify.parse(handle).getroot()
-    xml = handle.read()
-    print xml
-    return objectify.fromstring(xml)
+    return objectify.parse(handle).getroot()
+    #xml = handle.read()
+    #print xml
+    #return objectify.fromstring(xml)
 
 
 def _parse_game(node):
@@ -262,7 +262,7 @@ def _parse_user(node):
         if child.tag == 'game'
     ]
     values['favoriteUnits'] = [
-        dict(id=child.pyval, name=child.get('code')) 
+        child.get('code') 
         for child in node.favoriteUnits.iterchildren()
         if child.tag == 'unit'
     ]
@@ -277,10 +277,13 @@ def _parse_user(node):
     ]
     return values 
 
-#if __name__ == '__main__':
-#    print game(181897)
+if __name__ == '__main__':
 #    print open_games()
 #    print all_users()
-#    print user('basti688')
+    u = user('eviltwin')
+    print 'User %(name)s (%(points)s points)' % u,
+    print 'has %i games:' % len(u['games'])
+    for g in u['games']:
+        print ' - %(name)s (%(url)s)' % game(g['id'])
 #    print latest_maps()
 #    print headquarter('basti688', '...')
