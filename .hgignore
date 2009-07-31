@@ -1,0 +1,6 @@
+.svn
+python_weewar.egg-info
+
+syntax: glob
+*.pyc
+*.pyo
