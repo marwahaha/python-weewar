@@ -14,6 +14,66 @@ class TestXMLParsing(unittest.TestCase):
     def parsed_xml(self, xml):
         return objectify.fromstring(xml.strip())
         
+    def test_open_games(self):
+        """
+        XML response of open_games().
+        """
+        xml = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <games>
+            <game id="182456" />
+            <game id="182289" />
+            <game id="182410" />
+            <game id="181836" />
+            <game id="182385" />
+            <game id="182369" />
+            <game id="182272" />
+        </games>
+        """
+        expected = [182456, 182289, 182410, 181836, 182385, 182369, 182272]
+        self.api._call_api = lambda a: self.parsed_xml(xml)
+        self.assertEqual(self.api.open_games(), expected) 
+
+    def test_all_users(self):
+        """
+        XML response of all_users().
+        """
+        xml = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <users>
+            <user name="Watyousay" id="47874" rating="2213" />
+            <user name="Stirling" id="26468" rating="2114" />
+            <user name="ironcamel" id="1909" rating="2104" />
+            <user name="Mr_Clean" id="17562" rating="2050" />
+            <user name="elsirad" id="41192" rating="2050" />
+            <user name="jeye" id="6101" rating="2049" />
+            <user name="moJoe" id="4541" rating="2038" />
+            <user name="Juffe" id="43710" rating="2037" />
+            <user name="leelar" id="23263" rating="2018" />
+            <user name="Doughnonuthin" id="39655" rating="2017" />
+            <user name="General_Death" id="26235" rating="2001" />
+            <user name="Riipperi" id="43711" rating="1989" />
+            <user name="Aldairor" id="48371" rating="1968" />
+        </users>
+        """
+        expected = [
+            {'name' : 'Watyousay', 'id' : 47874, 'rating' : 2213}, 
+            {'name' : 'Stirling', 'id' : 26468, 'rating' : 2114}, 
+            {'name' : 'ironcamel', 'id' : 1909, 'rating' : 2104}, 
+            {'name' : 'Mr_Clean', 'id' : 17562, 'rating' : 2050}, 
+            {'name' : 'elsirad', 'id' : 41192, 'rating' : 2050}, 
+            {'name' : 'jeye', 'id' : 6101, 'rating' : 2049}, 
+            {'name' : 'moJoe', 'id' : 4541, 'rating' : 2038}, 
+            {'name' : 'Juffe', 'id' : 43710, 'rating' : 2037}, 
+            {'name' : 'leelar', 'id' : 23263, 'rating' : 2018}, 
+            {'name' : 'Doughnonuthin', 'id' : 39655, 'rating' : 2017}, 
+            {'name' : 'General_Death', 'id' : 26235, 'rating' : 2001}, 
+            {'name' : 'Riipperi', 'id' : 43711, 'rating' : 1989}, 
+            {'name' : 'Aldairor', 'id' : 48371, 'rating' : 1968} 
+        ]
+        self.api._call_api = lambda a: self.parsed_xml(xml)
+        self.assertEqual(self.api.all_users(), expected) 
+
     def test_game(self):
         """
         XML response of game().

@@ -86,8 +86,9 @@ class ReadOnlyAPI (object):
         #   ...
         # </users>
         return [
-            dict(id=child.get('id'), name=child.get('name'), 
-                 rating=child.get('rating')) 
+            dict(id=int(child.get('id')), 
+                 name=child.get('name'), 
+                 rating=int(child.get('rating'))) 
             for child in root.findall('user')
         ]
 
@@ -346,12 +347,12 @@ def headquarter(username, apikey):
     return api.headquarter()
     
 if __name__ == '__main__':
-    print open_games()
+#    print open_games()
     print all_users()
-    u = user('eviltwin')
-    print 'User %(name)s (%(points)s points)' % u,
-    print 'has %i games:' % len(u['games'])
-    for g in u['games']:
-        print ' - %(name)s (%(url)s)' % game(g['id'])
+#    u = user('eviltwin')
+#    print 'User %(name)s (%(points)s points)' % u,
+#    print 'has %i games:' % len(u['games'])
+#    for g in u['games']:
+#        print ' - %(name)s (%(url)s)' % game(g['id'])
 #    print latest_maps()
 #    print headquarter('basti688', '...')
