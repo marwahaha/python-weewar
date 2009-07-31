@@ -242,8 +242,10 @@ class ReadOnlyAPI (object):
             </maps>
 
         """
-        return dict((child.tag, child.pyval) 
-                    for child in node.iterchildren())
+        values = dict((child.tag, child.pyval) 
+                      for child in node.iterchildren())
+        values['id'] = int(node.get('id'))
+        return values
 
     def _parse_user(self, node):
         """
@@ -348,11 +350,11 @@ def headquarter(username, apikey):
     
 if __name__ == '__main__':
 #    print open_games()
-    print all_users()
+#    print all_users()
 #    u = user('eviltwin')
 #    print 'User %(name)s (%(points)s points)' % u,
 #    print 'has %i games:' % len(u['games'])
 #    for g in u['games']:
 #        print ' - %(name)s (%(url)s)' % game(g['id'])
-#    print latest_maps()
+    print latest_maps()
 #    print headquarter('basti688', '...')

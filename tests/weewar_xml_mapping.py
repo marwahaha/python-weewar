@@ -226,13 +226,85 @@ class TestXMLParsing(unittest.TestCase):
         #compare(self.api.user(12345), expected) 
         self.assertEqual(self.api.user(12345), expected) 
 
+    def test_latest_maps(self):
+        """
+        XML response of test_latest_maps().
+        """
+        xml = """
+        <maps>
+            <map id="42640">
+                <name>Somar's first map</name>
+                <initialCredits>1000</initialCredits>
+                <perBaseCredits>10</perBaseCredits>
+                <width>20</width>
+                <height>10</height>
+                <maxPlayers>2</maxPlayers>
+                <url>http://weewar.com/map/42640</url>
+                <thumbnail>http://weewar.com/images/maps/boardThumb_42640_ir1.png</thumbnail>
+                <preview>http://weewar.com/images/maps/preview_42640_ir1.png</preview>
+                <revision>2</revision>
+                <creator>somar96</creator>
+                <creatorProfile>http://weewar.com/user/somar96</creatorProfile>
+            </map>
+            <map id="42634">
+                <name>Copy of Landing Point</name>
+                <initialCredits>0</initialCredits>
+                <perBaseCredits>300</perBaseCredits>
+                <width>14</width>
+                <height>14</height>
+                <maxPlayers>2</maxPlayers>
+                <url>http://weewar.com/map/42634</url>
+                <thumbnail>http://weewar.com/images/maps/boardThumb_42634_ir2.png</thumbnail>
+                <preview>http://weewar.com/images/maps/preview_42634_ir2.png</preview>
+                <revision>2</revision>
+                <creator>Shulgin</creator>
+                <creatorProfile>http://weewar.com/user/Shulgin</creatorProfile>
+            </map>
+        </maps>
+        """
+        expected = [
+            {
+                'id' : 42640,
+                'name' : "Somar's first map",
+                'initialCredits' : 1000, 
+                'perBaseCredits' : 10, 
+                'width' : 20, 
+                'height' : 10, 
+                'maxPlayers' : 2, 
+                'url' : 'http://weewar.com/map/42640', 
+                'thumbnail' : 'http://weewar.com/images/maps/boardThumb_42640_ir1.png', 
+                'preview' : 'http://weewar.com/images/maps/preview_42640_ir1.png', 
+                'revision' : 2, 
+                'creator' : 'somar96', 
+                'creatorProfile' : 'http://weewar.com/user/somar96'
+            },
+            {
+                'id' : 42634, 
+                'name' : 'Copy of Landing Point', 
+                'initialCredits' : 0, 
+                'perBaseCredits' : 300, 
+                'width' : 14, 
+                'height' : 14, 
+                'maxPlayers' : 2, 
+                'url' : 'http://weewar.com/map/42634', 
+                'thumbnail' : 'http://weewar.com/images/maps/boardThumb_42634_ir2.png', 
+                'preview' : 'http://weewar.com/images/maps/preview_42634_ir2.png', 
+                'revision' : 2, 
+                'creator' : 'Shulgin', 
+                'creatorProfile' : 'http://weewar.com/user/Shulgin'
+            }
+        ]
+        self.api._call_api = lambda a: self.parsed_xml(xml)
+        #for dict1, dict2 in zip(self.api.latest_maps(), expected):
+        #    compare(dict1, dict2)
+        self.assertEqual(self.api.latest_maps(), expected) 
 
 def compare(dict1, dict2):
     keys = set(dict1.keys()) & set(dict2.keys())
     if set(dict1.keys()) != keys:
         print 'missing in dict1:', list(set(dict1.keys()) - keys)
     if set(dict2.keys()) != keys:
-        print 'missing in dict2:', list(set(dict1.keys()) - keys)
+        print 'missing in dict2:', list(set(dict2.keys()) - keys)
     for key in keys:
         if dict1[key] != dict2[key]:
             print '[%r]: %r != %r' % (key, dict1[key], dict2[key])
