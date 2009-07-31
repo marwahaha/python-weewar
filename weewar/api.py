@@ -297,7 +297,7 @@ class ReadOnlyAPI (object):
             if child.tag not in complex_types
         )
         values['name'] = node.get('name')
-        values['id'] = node.get('id')
+        values['id'] = int(node.get('id'))
         values['games'] = [
             dict(id=child.pyval, name=child.get('name')) 
             for child in node.games.iterchildren()
@@ -346,8 +346,8 @@ def headquarter(username, apikey):
     return api.headquarter()
     
 if __name__ == '__main__':
-#    print open_games()
-#    print all_users()
+    print open_games()
+    print all_users()
     u = user('eviltwin')
     print 'User %(name)s (%(points)s points)' % u,
     print 'has %i games:' % len(u['games'])
