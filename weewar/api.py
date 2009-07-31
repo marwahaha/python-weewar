@@ -32,19 +32,22 @@ class ReadOnlyAPI (object):
         """
         Calls the weewar API with authentication (if specified)
         """
-        #print 'opening %s...' % url
+        print 'opening %s...' % url
         req = urllib2.Request(url)
 
         if authentication and self.username is not None:
             base64string = base64.encodestring(
-                '%s:%s' % (username, password))[:-1]
+                '%s:%s' % (self.username, self.apikey))[:-1]
             req.add_header("Authorization", "Basic %s" % base64string)
 
+        print '%s:%s' % (self.username, self.apikey)
+        print req
+
         handle = urllib2.urlopen(req)
-        #return objectify.parse(handle).getroot()
-        xml = handle.read()
-        print xml
-        return objectify.fromstring(xml)
+        return objectify.parse(handle).getroot()
+        #xml = handle.read()
+        #print xml
+        #return objectify.fromstring(xml)
 
     # Access specific games
     URL_GAME = 'http://weewar.com/api1/game/%s'
@@ -140,10 +143,10 @@ class ReadOnlyAPI (object):
         #   <map>38297</map>
         #   <factionState>playing</factionState>
         # </game>
-        games = dict(
+        games = [dict(
             (child.tag, child.pyval) 
-            for game in root.findall('game')
             for child in game.iterchildren())
+            for game in root.findall('game')]
         return need_attention, games
 
     def _parse_game(self, node):
@@ -348,7 +351,7 @@ def headquarter(username, apikey):
     api = ReadOnlyAPI(username, apikey)
     return api.headquarter()
     
-if __name__ == '__main__':
+#if __name__ == '__main__':
 #    print open_games()
 #    print all_users()
 #    u = user('eviltwin')
@@ -356,5 +359,5 @@ if __name__ == '__main__':
 #    print 'has %i games:' % len(u['games'])
 #    for g in u['games']:
 #        print ' - %(name)s (%(url)s)' % game(g['id'])
-    print latest_maps()
-#    print headquarter('basti688', '...')
+#    print latest_maps()
+#    print headquarter('eviltwin', '...')

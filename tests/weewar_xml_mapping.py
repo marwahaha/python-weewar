@@ -299,6 +299,69 @@ class TestXMLParsing(unittest.TestCase):
         #    compare(dict1, dict2)
         self.assertEqual(self.api.latest_maps(), expected) 
 
+    def test_headquarter(self):
+        """
+        """
+        xml = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <games>
+            <game>
+                <id>18682</id>
+                <name>Twins, Basil!</name>
+                <state>running</state>
+                <since>3 minutes</since>
+                <rated>true</rated>
+                <link>http://weewar.com/game/18682</link>
+                <url>http://weewar.com/game/18682</url>
+                <map>1</map>
+                <factionState>playing</factionState>
+            </game>
+            <game>
+                <id>21885</id>
+                <name>Another short one</name>
+                <state>finished</state>
+                <result>victory</result>
+                <since>17 hours 36 minutes</since>
+                <rated>true</rated>
+                <link>http://weewar.com/game/21885</link>
+                <url>http://weewar.com/game/21885</url>
+                <map>8</map>
+                <factionState>finished</factionState>
+            </game>
+            <inNeedOfAttention>0</inNeedOfAttention>
+        </games>
+        """
+        expected = (
+            0, 
+            [
+                {
+                    'id' : 18682, 
+                    'name' : 'Twins, Basil!', 
+                    'state' : 'running', 
+                    'since' : '3 minutes', 
+                    'rated' : True, 
+                    'link' : 'http://weewar.com/game/18682', 
+                    'url' : 'http://weewar.com/game/18682', 
+                    'map' : 1, 
+                    'factionState' : 'playing' 
+                },
+                {
+                    'id' : 21885, 
+                    'name' : 'Another short one', 
+                    'state' : 'finished', 
+                    'result' : 'victory', 
+                    'since' : '17 hours 36 minutes', 
+                    'rated' : True, 
+                    'link' : 'http://weewar.com/game/21885', 
+                    'url' : 'http://weewar.com/game/21885', 
+                    'map' : 8, 
+                    'factionState' : 'finished'
+                }
+            ]
+        )
+        self.api._call_api = lambda a, b=None: self.parsed_xml(xml)
+        self.assertEqual(self.api.headquarter(), expected) 
+
 def compare(dict1, dict2):
     keys = set(dict1.keys()) & set(dict2.keys())
     if set(dict1.keys()) != keys:
