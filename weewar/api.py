@@ -13,8 +13,7 @@ from lxml import etree
 from lxml import objectify
 
 __all__ = [
-    'game', 'open_games', 'all_users', 'user', 'latest_maps',
-    'headquarter',
+    'game', 'open_games', 'all_users', 'user', 'latest_maps', 'headquarter',
 ]
 
 class ReadOnlyAPI (object):
@@ -24,6 +23,11 @@ class ReadOnlyAPI (object):
 
     def __init__(self, username=None, apikey=None):
         """
+        Initialise API (with user credentials for authenticated calls).
+        @param username: weewar username
+        @type username: str
+        @param apikey: Matching API key (from http://weewar.com/apiToken)
+        @type apikey: str
         """
         self.username = username
         self.apikey = apikey
@@ -326,27 +330,65 @@ class ReadOnlyAPI (object):
         return values 
 
 def game(id):
+    """
+    Returns the status of a game and gives information about the participating
+    players.
+    @param id: Unique ID of weewar game.
+    @type id: int
+    @rtype: dict
+    """
     api = ReadOnlyAPI()
     return api.game(id)
     
 def open_games():
+    """
+    Returns all currently available open games as a list of IDs.
+    @rtype: [int]
+    """
     api = ReadOnlyAPI()
     return api.open_games()
     
 def all_users():
+    """
+    Returns a list of all users who have been online in the last 7 days,
+    including their current ranking.
+    @rtype: dict
+    """
     api = ReadOnlyAPI()
     return api.all_users()
     
 def user(username):
+    """
+    Returns detailed information about a single user, including everything that
+    is visible on the profile page and the games the user is participating in.
+    @param unsername: Unique unsername of weewar player.
+    @type id: str
+    @rtype: dict
+    """
     api = ReadOnlyAPI()
     return api.user(username)
 
 def latest_maps():
+    """
+    Returns the latest published maps including urls for previews, images, and
+    other details.
+    @rtype: dict
+    """
     api = ReadOnlyAPI()
     return api.latest_maps()
     
 def headquarter(username, apikey):
     """
+    Returns all games that are listed in your Headquarters. Includes
+    information about the id, the url, the state, and the name of the game.  An
+    attribute is added if the game is in need of attention, e.g: its the users
+    turn or the game is not yet started or the user is invited to this game.
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @return: A tuple containing (<games in need of attention>, [<game info>])
+    @rtype: (int, [dict, ...])
     """
     api = ReadOnlyAPI(username, apikey)
     return api.headquarter()
