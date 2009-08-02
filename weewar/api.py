@@ -3,7 +3,15 @@
 Wrapper for the Weewar XML Application Interface (API)
 ======================================================
 
-Documentation is available at http://weewar.wikispaces.com/api
+Weewar provides 2 APIs: one read-only API for their players and a bot API
+called ELIZA.  Further documentation on both is available at
+http://weewar.wikispaces.com/api
+
+Authentication
+--------------
+Some of the provided functions require a username and a password. Use your
+Weewar account username and the API token accessible via
+http://weewar.com/apiToken.
 
 """
 
@@ -20,6 +28,7 @@ __all__ = [
 class ReadOnlyAPI (object):
     
     """
+    The Read-only API provides the basic information on users and games.
     """
 
     def __init__(self, username=None, apikey=None):
@@ -339,6 +348,27 @@ class ReadOnlyAPI (object):
         ]
         return values 
 
+
+class ELIZA (ReadOnlyAPI):
+
+    """
+    Weewar Bot-API (ELIZA)
+    ======================
+
+    In order for ELIZA to accept request the username MUST start with "ai_"
+    This is so bots are recognizable by the community as such.
+
+    You can not register a user name with a "_" in it at the moment, however
+    you can change the name in your settings after the initial registration to
+    comply with the Eliza requirements. The registration process will soon be
+    fixed accordingly.
+    """
+
+    URL_GAME_STATE = 'http://weewar.com/api1/gamestate/%s'
+
+    def game_state(self, id):
+        """
+        """
 
 class UserNotFound (Exception):
     """
