@@ -7,13 +7,14 @@ Documentation is available at http://weewar.wikispaces.com/api
 
 """
 
-import urllib2
+from urllib2 import Request, urlopen, HTTPError
 import base64
 from lxml import etree
 from lxml import objectify
 
 __all__ = [
     'game', 'open_games', 'all_users', 'user', 'latest_maps', 'headquarter',
+    'UserNotFound', 'GameNotFound', 
 ]
 
 class ReadOnlyAPI (object):
@@ -36,33 +37,36 @@ class ReadOnlyAPI (object):
         """
         Calls the weewar API with authentication (if specified)
         """
-        print 'opening %s...' % url
-        req = urllib2.Request(url)
+        #print 'opening %s...' % url
+        req = Request(url)
 
         if authentication and self.username is not None:
             base64string = base64.encodestring(
                 '%s:%s' % (self.username, self.apikey))[:-1]
             req.add_header("Authorization", "Basic %s" % base64string)
 
-        print '%s:%s' % (self.username, self.apikey)
-        print req
-
-        handle = urllib2.urlopen(req)
+        handle = urlopen(req)
         return objectify.parse(handle).getroot()
         #xml = handle.read()
         #print xml
         #return objectify.fromstring(xml)
 
     # Access specific games
-    URL_GAME = 'http://weewar.com/api1/game/%s'
+    URL_GAME = 'http://weewar.com/api/game/%s'
 
     def game(self, id):
         """
         Returns the status of a game and gives information about the
         participating players.
         """
-        root = self._call_api(self.URL_GAME % id)
-        return self._parse_game(root)
+        try:
+            root = self._call_api(self.URL_GAME % id)
+            return self._parse_game(root)
+        except HTTPError, e:
+            if e.code==404:
+                raise GameNotFound(id)
+            else:
+                raise
 
     # Access all open games
     URL_OPEN_GAMES = 'http://weewar.com/api1/games/open'
@@ -108,8 +112,14 @@ class ReadOnlyAPI (object):
         that is visible on the profile page and the games the user is
         participating in.
         """
-        root = self._call_api(self.URL_USER % username)
-        return self._parse_user(root)
+        try:
+            root = self._call_api(self.URL_USER % username)
+            return self._parse_user(root)
+        except HTTPError, e:
+            if e.code==404:
+                raise UserNotFound(username)
+            else:
+                raise
 
     # Access the latest maps
     URL_LATEST_MAPS = 'http://weewar.com/api1/maps'
@@ -328,6 +338,17 @@ class ReadOnlyAPI (object):
             if child.tag == 'map'
         ]
         return values 
+
+
+class UserNotFound (Exception):
+    """
+    The specified weewar game could not be found.
+    """
+
+class GameNotFound (Exception):
+    """
+    The specified weewar game could not be found.
+    """
 
 def game(id):
     """
