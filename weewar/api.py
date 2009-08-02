@@ -14,7 +14,7 @@ from lxml import objectify
 
 __all__ = [
     'game', 'open_games', 'all_users', 'user', 'latest_maps', 'headquarter',
-    'UserNotFound', 'GameNotFound', 
+    'AuthenticationError', 'ServerError', 'UserNotFound', 'GameNotFound', 
 ]
 
 class ReadOnlyAPI (object):
@@ -45,11 +45,21 @@ class ReadOnlyAPI (object):
                 '%s:%s' % (self.username, self.apikey))[:-1]
             req.add_header("Authorization", "Basic %s" % base64string)
 
-        handle = urlopen(req)
-        return objectify.parse(handle).getroot()
-        #xml = handle.read()
-        #print xml
-        #return objectify.fromstring(xml)
+        try:
+            handle = urlopen(req)
+            return objectify.parse(handle).getroot()
+            #xml = handle.read()
+            #print xml
+            #return objectify.fromstring(xml)
+        except HTTPError, e:
+            # HTTP response 401: Unauthorized
+            if e.code == 401: 
+                raise AuthenticationError
+            elif e.code == 500:
+                raise ServerError(e.msg)
+            # otherwise raise again
+            else: 
+                raise
 
     # Access specific games
     URL_GAME = 'http://weewar.com/api/game/%s'
@@ -146,7 +156,7 @@ class ReadOnlyAPI (object):
         root = self._call_api(self.URL_HEADQUARTER, True)
         need_attention = root.inNeedOfAttention
         
-        # <game>
+        # <game inNeedOfAttention="true">
         #   <id>181897</id>
         #   <name>Stirling's Aruba</name>
         #   <state>running</state>
@@ -157,10 +167,12 @@ class ReadOnlyAPI (object):
         #   <map>38297</map>
         #   <factionState>playing</factionState>
         # </game>
-        games = [dict(
-            (child.tag, child.pyval) 
-            for child in game.iterchildren())
-            for game in root.findall('game')]
+        def _parse(node):
+            game = dict((child.tag, child.pyval) 
+                for child in node.iterchildren())
+            game['inNeedOfAttention'] = node.get('inNeedOfAttention')=='true'
+            return game
+        games = map(_parse, root.findall('game'))
         return need_attention, games
 
     def _parse_game(self, node):
@@ -339,6 +351,15 @@ class ReadOnlyAPI (object):
         ]
         return values 
 
+class ServerError (Exception):
+    """
+    Something went completely berserk on the server!
+    """
+
+class AuthenticationError (Exception):
+    """
+    The submitted user credentials were not correct.
+    """
 
 class UserNotFound (Exception):
     """

@@ -316,7 +316,7 @@ class TestXMLParsing(unittest.TestCase):
                 <map>1</map>
                 <factionState>playing</factionState>
             </game>
-            <game>
+            <game inNeedOfAttention="true">
                 <id>21885</id>
                 <name>Another short one</name>
                 <state>finished</state>
@@ -328,14 +328,15 @@ class TestXMLParsing(unittest.TestCase):
                 <map>8</map>
                 <factionState>finished</factionState>
             </game>
-            <inNeedOfAttention>0</inNeedOfAttention>
+            <inNeedOfAttention>1</inNeedOfAttention>
         </games>
         """
         expected = (
-            0, 
+            1, 
             [
                 {
                     'id' : 18682, 
+                    'inNeedOfAttention' : False, 
                     'name' : 'Twins, Basil!', 
                     'state' : 'running', 
                     'since' : '3 minutes', 
@@ -347,6 +348,7 @@ class TestXMLParsing(unittest.TestCase):
                 },
                 {
                     'id' : 21885, 
+                    'inNeedOfAttention' : True, 
                     'name' : 'Another short one', 
                     'state' : 'finished', 
                     'result' : 'victory', 
