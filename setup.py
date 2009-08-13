@@ -17,13 +17,13 @@ game". Apart from being highly addictive, it provides 2 APIs: one read-only API
 for players and a bot API called ELIZA (further documentation on both is
 available at http://weewar.wikispaces.com/api) . 
 
-This module aims enables you to conveniently call each of these API functions
-from within your python script.
+This module aims at enabling you to conveniently call each of these API
+functions from within your python script.
 
 Available API calls
 -------------------
 
-The following functions are supplied:
+The following functions are currently supported:
 
  - game(id) returns the status of a game and gives information about the
    participating players.
@@ -66,11 +66,11 @@ At the moment support for commands still needs to be implemented.
     
     author="Sebastian Rahlf",
     author_email="basti AT redtoad DOT de",
-    url="http://bitbucket.org/basti/python-weewar/",
+    url="http://bitbucket.org/basti/python-weewar/downloads/",
     
     packages=['weewar'],
     install_requires=['lxml>=2.1.5'],
-
+    
     classifiers=[
         'Development Status :: 3 - Alpha', 
         'Intended Audience :: Developers', 
