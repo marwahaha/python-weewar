@@ -1,6 +1,6 @@
 import unittest
 from lxml import objectify
-from weewar.api import ReadOnlyAPI
+from weewar.api import ReadOnlyAPI, ELIZA
 
 class TestXMLParsing(unittest.TestCase):
 
@@ -362,6 +362,807 @@ class TestXMLParsing(unittest.TestCase):
         self.api._call_api = lambda a, b=None: self.parsed_xml(xml)
         self.assertEqual(self.api.headquarter(), expected) 
 
+class TestELIZAMapping (TestXMLParsing):
+    
+    """
+    Test correct parsing of XML responses for ELIZA API.
+    """
+    
+    def setUp(self):
+        self.api = ELIZA()
+        
+    def test_game_state(self):
+        """
+        Test game_state for correct XML parsing.
+        """
+        xml = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <game id="18682">
+        <id>18682</id>
+        <name>Twins, Basil!</name>
+        <round>21</round>
+        <state>finished</state>
+        <pendingInvites>false</pendingInvites>
+        <pace>259200</pace>
+        <type>Pro</type>
+        <url>http://weewar.com/game/18682</url>
+        <rated>true</rated>
+        <since>4 days 19 hours 34 minutes</since>
+        <players>
+            <player index="0" current="true" result="victory">eviltwin</player>
+            <player index="1" result="votedout">thomas419</player>
+        </players>
+        <disabledUnitTypes>
+            <type>Anti Aircraft</type>
+            <type>Assault Artillery</type>
+            <type>Battleship</type>
+            <type>Bomber</type>
+            <type>Destroyer</type>
+            <type>Jet</type>
+            <type>Helicopter</type>
+            <type>Hovercraft</type>
+            <type>Speedboat</type>
+            <type>Submarine</type>
+            <type>DFA</type>
+            <type>Berserker</type>
+        </disabledUnitTypes>
+        <map>1</map>
+        <mapUrl>http://weewar.com/map/1</mapUrl>
+        <creditsPerBase>200</creditsPerBase>
+        <initialCredits>100</initialCredits>
+        <playingSince>Sat Aug 08 15:17:28 UTC 2009</playingSince>
+        <factions>
+            <faction current="true" credits="600" playerId="12903" playerName="eviltwin" state="finished" result="victory">
+                <unit x="1" y="10" type="Light Artillery" quantity="7" finished="false" />
+                <terrain x="1" y="10" type="Base" finished="false" />
+            </faction>
+            <faction playerId="12911" playerName="thomas419" state="finished" result="votedout">
+                <unit x="2" y="10" type="Heavy Tank" quantity="4" finished="false" />
+                <unit x="3" y="9" type="Tank" quantity="10" finished="false" />
+                <unit x="3" y="11" type="Heavy Trooper" quantity="5" finished="false" />
+                <unit x="4" y="10" type="Heavy Artillery" quantity="10" finished="false" />
+                <unit x="5" y="9" type="Heavy Artillery" quantity="10" finished="false" />
+                <unit x="5" y="10" type="Heavy Artillery" quantity="10" finished="false" />
+                <unit x="5" y="11" type="Heavy Artillery" quantity="2" finished="false" />
+                <unit x="6" y="8" type="Heavy Tank" quantity="7" finished="false" />
+                <unit x="6" y="9" type="Heavy Tank" quantity="10" finished="false" />
+                <unit x="6" y="10" type="Heavy Artillery" quantity="10" finished="false" />
+                <unit x="6" y="11" type="Raider" quantity="10" finished="false" />
+                <unit x="7" y="7" type="Raider" quantity="10" finished="false" />
+                <unit x="7" y="8" type="Heavy Artillery" quantity="2" finished="false" />
+                <unit x="7" y="12" type="Heavy Trooper" quantity="10" finished="false" />
+                <unit x="8" y="8" type="Heavy Tank" quantity="10" finished="false" />
+                <unit x="8" y="12" type="Heavy Tank" quantity="10" finished="false" />
+                <unit x="8" y="13" type="Heavy Artillery" quantity="10" finished="false" />
+                <unit x="9" y="11" type="Heavy Artillery" quantity="10" finished="false" />
+                <unit x="10" y="5" type="Heavy Artillery" quantity="10" finished="false" />
+                <unit x="10" y="6" type="Heavy Artillery" quantity="2" finished="false" />
+                <unit x="10" y="7" type="Heavy Artillery" quantity="10" finished="false" />
+                <unit x="10" y="10" type="Heavy Artillery" quantity="5" finished="false" />
+                <unit x="11" y="9" type="Heavy Trooper" quantity="10" finished="false" />
+                <terrain x="6" y="10" type="Base" finished="false" />
+                <terrain x="7" y="6" type="Base" finished="false" />
+                <terrain x="8" y="14" type="Base" finished="false" />
+                <terrain x="9" y="9" type="Base" finished="false" />
+                <terrain x="9" y="10" type="Base" finished="false" />
+                <terrain x="10" y="10" type="Base" finished="false" />
+                <terrain x="11" y="6" type="Base" finished="false" />
+                <terrain x="11" y="13" type="Base" finished="false" />
+                <terrain x="13" y="1" type="Base" finished="false" />
+                <terrain x="13" y="9" type="Base" finished="false" />
+                <terrain x="14" y="18" type="Base" finished="false" />
+            </faction>
+        </factions>
+        </game>
+        """
+        expected = {
+            'id' : 18682,
+            'name' : 'Twins, Basil!',
+            'round' : 21,
+            'state' : 'finished',
+            'pendingInvites' : False,
+            'pace' : 259200,
+            'type' : 'Pro',
+            'url' : 'http://weewar.com/game/18682',
+            'rated' : True,
+            'since' : '4 days 19 hours 34 minutes',
+            'players' : [
+                {
+                    'index' : 0, 
+                    'current' : True, 
+                    'result' : 'victory', 
+                    'username' : 'eviltwin'
+                },
+                {
+                    'index' : 1, 
+                    'current' : False, 
+                    'result' : 'votedout', 
+                    'username' : 'thomas419'
+                }
+            ],
+            'disabledUnitTypes' : [
+                'Anti Aircraft', 'Assault Artillery', 'Battleship', 'Bomber', 
+                'Destroyer', 'Jet', 'Helicopter', 'Hovercraft', 'Speedboat', 
+                'Submarine', 'DFA', 'Berserker',
+            ],
+            'map' : 1,
+            'mapUrl': 'http://weewar.com/map/1', 
+            'creditsPerBase' : 200, 
+            'initialCredits' : 100, 
+            'playingSince' : 'Sat Aug 08 15:17:28 UTC 2009', 
+            'factions' : [
+                {
+                    'current' : True,
+                    'credits' : 600,
+                    'playerId' : 12903,
+                    'playerName' : 'eviltwin',
+                    'state' : 'finished', 
+                    'result' : 'victory',
+                    'units' : [
+                        {
+                            'x' : 1, 'y' : 10, 
+                            'type' : 'Light Artillery', 
+                            'quantity' : 7,
+                            'finished' : False
+                        }
+                    ],
+                    'terrain' : [
+                        {
+                            'x' : 1, 'y' : 10,
+                            'type' : 'Base',
+                            'finished' : False
+                        }
+                    ]
+                },
+                {
+                    'current' : False,
+                    'playerId' : 12911,
+                    'playerName' : 'thomas419',
+                    'state' : 'finished', 
+                    'result' : 'votedout',
+                    'units' : [
+                        {'x' : 2, 'y' : 10, 'type' : 'Heavy Tank', 'quantity' : 4, 'finished' : False},
+                        {'x' : 3, 'y' : 9, 'type' : 'Tank', 'quantity' : 10, 'finished' : False},
+                        {'x' : 3, 'y' : 11, 'type' : 'Heavy Trooper', 'quantity' : 5, 'finished' : False},
+                        {'x' : 4, 'y' : 10, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
+                        {'x' : 5, 'y' : 9, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
+                        {'x' : 5, 'y' : 10, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
+                        {'x' : 5, 'y' : 11, 'type' : 'Heavy Artillery', 'quantity' : 2, 'finished' : False},
+                        {'x' : 6, 'y' : 8, 'type' : 'Heavy Tank', 'quantity' : 7, 'finished' : False},
+                        {'x' : 6, 'y' : 9, 'type' : 'Heavy Tank', 'quantity' : 10, 'finished' : False},
+                        {'x' : 6, 'y' : 10, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
+                        {'x' : 6, 'y' : 11, 'type' : 'Raider', 'quantity' : 10, 'finished' : False},
+                        {'x' : 7, 'y' : 7, 'type' : 'Raider', 'quantity' : 10, 'finished' : False},
+                        {'x' : 7, 'y' : 8, 'type' : 'Heavy Artillery', 'quantity' : 2, 'finished' : False},
+                        {'x' : 7, 'y' : 12, 'type' : 'Heavy Trooper', 'quantity' : 10, 'finished' : False},
+                        {'x' : 8, 'y' : 8, 'type' : 'Heavy Tank', 'quantity' : 10, 'finished' : False},
+                        {'x' : 8, 'y' : 12, 'type' : 'Heavy Tank', 'quantity' : 10, 'finished' : False},
+                        {'x' : 8, 'y' : 13, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
+                        {'x' : 9, 'y' : 11, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
+                        {'x' : 10, 'y' : 5, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
+                        {'x' : 10, 'y' : 6, 'type' : 'Heavy Artillery', 'quantity' : 2, 'finished' : False},
+                        {'x' : 10, 'y' : 7, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
+                        {'x' : 10, 'y' : 10, 'type' : 'Heavy Artillery', 'quantity' : 5, 'finished' : False},
+                        {'x' : 11, 'y' : 9, 'type' : 'Heavy Trooper', 'quantity' : 10, 'finished' : False},
+                    ],
+                    'terrain' : [
+                        {'x' : 6, 'y' : 10, 'type' : 'Base', 'finished' : False},
+                        {'x' : 7, 'y' : 6, 'type' : 'Base', 'finished' : False},
+                        {'x' : 8, 'y' : 14, 'type' : 'Base', 'finished' : False},
+                        {'x' : 9, 'y' : 9, 'type' : 'Base', 'finished' : False},
+                        {'x' : 9, 'y' : 10, 'type' : 'Base', 'finished' : False},
+                        {'x' : 10, 'y' : 10, 'type' : 'Base', 'finished' : False},
+                        {'x' : 11, 'y' : 6, 'type' : 'Base', 'finished' : False},
+                        {'x' : 11, 'y' : 13, 'type' : 'Base', 'finished' : False},
+                        {'x' : 13, 'y' : 1, 'type' : 'Base', 'finished' : False},
+                        {'x' : 13, 'y' : 9, 'type' : 'Base', 'finished' : False},
+                        {'x' : 14, 'y' : 18, 'type' : 'Base', 'finished' : False},
+                    ]
+                }
+            ]
+        }
+        self.api._call_api = lambda a, b=None: self.parsed_xml(xml)
+        self.assertEqual(self.api.game_state(1234), expected) 
+
+    def test_map_layout(self):
+        """
+        Test map_layout for correct XML parsing.
+        """
+        xml = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <map id="8">
+            <name>One on one</name>
+            <initialCredits>300</initialCredits>
+            <perBaseCredits>100</perBaseCredits>
+            <width>22</width>
+            <height>15</height>
+            <maxPlayers>2</maxPlayers>
+            <url>http://weewar.com/map/8</url>
+            <thumbnail>http://weewar.com/images/maps/boardThumb_8_ir3.png</thumbnail>
+            <preview>http://weewar.com/images/maps/preview_8_ir3.png</preview>
+            <revision>2</revision>
+            <creator>alex</creator>
+            <creatorProfile>http://weewar.com/user/alex</creatorProfile>
+            <terrains>
+                <terrain x="0" y="7" type="Plains" />
+                <terrain x="0" y="8" type="Woods" />
+                <terrain x="0" y="9" type="Woods" />
+                <terrain x="1" y="3" type="Plains" />
+                <terrain x="1" y="5" type="Mountains" />
+                <terrain x="1" y="6" type="Plains" />
+                <terrain x="1" y="7" type="Woods" />
+                <terrain x="1" y="8" type="Mountains" />
+                <terrain x="1" y="9" type="Woods" />
+                <terrain x="1" y="10" type="Woods" />
+                <terrain x="2" y="3" type="Water" />
+                <terrain x="2" y="4" type="Plains" />
+                <terrain x="2" y="5" type="Plains" />
+                <terrain x="2" y="6" type="Plains" />
+                <terrain x="2" y="7" type="Plains" />
+                <terrain x="2" y="8" type="Plains" />
+                <terrain x="2" y="9" type="Plains" />
+                <terrain x="2" y="10" type="Woods" />
+                <terrain x="2" y="11" type="Woods" />
+                <terrain x="3" y="2" type="Water" />
+                <terrain x="3" y="3" type="Water" />
+                <terrain x="3" y="4" type="Plains" />
+                <terrain x="3" y="5" type="Plains" />
+                <terrain x="3" y="6" type="Plains" />
+                <terrain x="3" y="7" type="Plains" />
+                <terrain startUnit="Trooper" startUnitOwner="1" startFaction="1" x="3" y="8" type="Base" />
+                <terrain x="3" y="9" type="Mountains" />
+                <terrain x="3" y="10" type="Woods" />
+                <terrain x="3" y="11" type="Mountains" />
+                <terrain x="3" y="12" type="Woods" />
+                <terrain x="3" y="13" type="Woods" />
+                <terrain x="4" y="2" type="Water" />
+                <terrain x="4" y="3" type="Water" />
+                <terrain x="4" y="4" type="Desert" />
+                <terrain x="4" y="5" type="Plains" />
+                <terrain x="4" y="6" type="Plains" />
+                <terrain x="4" y="7" type="Plains" />
+                <terrain x="4" y="8" type="Mountains" />
+                <terrain x="4" y="9" type="Plains" />
+                <terrain x="4" y="10" type="Plains" />
+                <terrain x="4" y="11" type="Plains" />
+                <terrain x="4" y="12" type="Mountains" />
+                <terrain x="4" y="13" type="Woods" />
+                <terrain x="5" y="2" type="Water" />
+                <terrain x="5" y="3" type="Water" />
+                <terrain x="5" y="4" type="Desert" />
+                <terrain x="5" y="5" type="Desert" />
+                <terrain x="5" y="6" type="Plains" />
+                <terrain x="5" y="7" type="Plains" />
+                <terrain x="5" y="8" type="Plains" />
+                <terrain x="5" y="9" type="Plains" />
+                <terrain x="5" y="10" type="Plains" />
+                <terrain x="5" y="11" type="Plains" />
+                <terrain x="5" y="12" type="Plains" />
+                <terrain x="5" y="13" type="Plains" />
+                <terrain x="5" y="14" type="Plains" />
+                <terrain x="6" y="3" type="Water" />
+                <terrain x="6" y="4" type="Water" />
+                <terrain x="6" y="5" type="Desert" />
+                <terrain x="6" y="6" type="Plains" />
+                <terrain x="6" y="7" type="Plains" />
+                <terrain x="6" y="8" type="Plains" />
+                <terrain x="6" y="9" type="Plains" />
+                <terrain x="6" y="10" type="Plains" />
+                <terrain x="6" y="11" type="Plains" />
+                <terrain x="6" y="12" type="Plains" />
+                <terrain x="6" y="13" type="Plains" />
+                <terrain x="6" y="14" type="Base" />
+                <terrain x="7" y="2" type="Water" />
+                <terrain x="7" y="3" type="Water" />
+                <terrain x="7" y="4" type="Desert" />
+                <terrain x="7" y="5" type="Plains" />
+                <terrain x="7" y="6" type="Plains" />
+                <terrain x="7" y="7" type="Plains" />
+                <terrain x="7" y="8" type="Plains" />
+                <terrain x="7" y="9" type="Plains" />
+                <terrain x="7" y="10" type="Plains" />
+                <terrain x="7" y="11" type="Plains" />
+                <terrain x="7" y="12" type="Plains" />
+                <terrain x="7" y="13" type="Plains" />
+                <terrain x="7" y="14" type="Mountains" />
+                <terrain x="8" y="1" type="Water" />
+                <terrain x="8" y="2" type="Water" />
+                <terrain x="8" y="3" type="Desert" />
+                <terrain x="8" y="4" type="Desert" />
+                <terrain x="8" y="5" type="Plains" />
+                <terrain x="8" y="6" type="Plains" />
+                <terrain x="8" y="7" type="Plains" />
+                <terrain x="8" y="8" type="Plains" />
+                <terrain x="8" y="9" type="Plains" />
+                <terrain x="8" y="10" type="Plains" />
+                <terrain x="8" y="11" type="Plains" />
+                <terrain x="8" y="12" type="Plains" />
+                <terrain x="8" y="13" type="Plains" />
+                <terrain x="8" y="14" type="Plains" />
+                <terrain x="9" y="0" type="Water" />
+                <terrain x="9" y="1" type="Water" />
+                <terrain x="9" y="2" type="Water" />
+                <terrain x="9" y="3" type="Desert" />
+                <terrain x="9" y="4" type="Water" />
+                <terrain x="9" y="5" type="Water" />
+                <terrain x="9" y="6" type="Plains" />
+                <terrain x="9" y="7" type="Woods" />
+                <terrain x="9" y="8" type="Plains" />
+                <terrain x="9" y="9" type="Plains" />
+                <terrain x="9" y="10" type="Plains" />
+                <terrain x="9" y="11" type="Plains" />
+                <terrain x="9" y="12" type="Plains" />
+                <terrain x="9" y="13" type="Plains" />
+                <terrain x="9" y="14" type="Mountains" />
+                <terrain x="10" y="0" type="Water" />
+                <terrain x="10" y="1" type="Desert" />
+                <terrain x="10" y="2" type="Desert" />
+                <terrain x="10" y="3" type="Plains" />
+                <terrain x="10" y="4" type="Desert" />
+                <terrain x="10" y="5" type="Water" />
+                <terrain x="10" y="6" type="Desert" />
+                <terrain x="10" y="7" type="Desert" />
+                <terrain x="10" y="8" type="Woods" />
+                <terrain x="10" y="9" type="Plains" />
+                <terrain x="10" y="10" type="Plains" />
+                <terrain x="10" y="11" type="Plains" />
+                <terrain x="10" y="12" type="Plains" />
+                <terrain startUnit="Trooper" startUnitOwner="1" startFaction="1" x="10" y="13" type="Base" />
+                <terrain x="10" y="14" type="Desert" />
+                <terrain x="11" y="0" type="Desert" />
+                <terrain x="11" y="1" type="Plains" />
+                <terrain x="11" y="2" type="Plains" />
+                <terrain x="11" y="3" type="Mountains" />
+                <terrain x="11" y="4" type="Plains" />
+                <terrain x="11" y="5" type="Mountains" />
+                <terrain x="11" y="6" type="Water" />
+                <terrain x="11" y="7" type="Plains" />
+                <terrain x="11" y="8" type="Plains" />
+                <terrain x="11" y="9" type="Desert" />
+                <terrain x="11" y="10" type="Mountains" />
+                <terrain x="11" y="11" type="Desert" />
+                <terrain x="11" y="12" type="Mountains" />
+                <terrain x="11" y="13" type="Desert" />
+                <terrain x="11" y="14" type="Desert" />
+                <terrain x="12" y="0" type="Plains" />
+                <terrain x="12" y="1" type="Plains" />
+                <terrain startUnit="Trooper" startUnitOwner="0" startFaction="0" x="12" y="2" type="Base" />
+                <terrain x="12" y="3" type="Plains" />
+                <terrain x="12" y="4" type="Plains" />
+                <terrain x="12" y="5" type="Plains" />
+                <terrain x="12" y="6" type="Mountains" />
+                <terrain x="12" y="7" type="Plains" />
+                <terrain x="12" y="8" type="Plains" />
+                <terrain x="12" y="9" type="Water" />
+                <terrain x="12" y="10" type="Water" />
+                <terrain x="12" y="11" type="Water" />
+                <terrain x="12" y="12" type="Desert" />
+                <terrain x="12" y="13" type="Water" />
+                <terrain x="12" y="14" type="Water" />
+                <terrain x="13" y="0" type="Mountains" />
+                <terrain x="13" y="1" type="Plains" />
+                <terrain x="13" y="2" type="Mountains" />
+                <terrain x="13" y="3" type="Plains" />
+                <terrain x="13" y="4" type="Plains" />
+                <terrain x="13" y="5" type="Plains" />
+                <terrain x="13" y="6" type="Plains" />
+                <terrain x="13" y="7" type="Plains" />
+                <terrain x="13" y="8" type="Woods" />
+                <terrain x="13" y="9" type="Woods" />
+                <terrain x="13" y="10" type="Desert" />
+                <terrain x="13" y="11" type="Water" />
+                <terrain x="13" y="12" type="Desert" />
+                <terrain x="13" y="13" type="Water" />
+                <terrain x="13" y="14" type="Water" />
+                <terrain x="14" y="0" type="Mountains" />
+                <terrain x="14" y="1" type="Plains" />
+                <terrain x="14" y="2" type="Plains" />
+                <terrain x="14" y="3" type="Plains" />
+                <terrain x="14" y="4" type="Plains" />
+                <terrain x="14" y="5" type="Plains" />
+                <terrain x="14" y="6" type="Plains" />
+                <terrain x="14" y="7" type="Plains" />
+                <terrain x="14" y="8" type="Plains" />
+                <terrain x="14" y="9" type="Plains" />
+                <terrain x="14" y="10" type="Plains" />
+                <terrain x="14" y="11" type="Desert" />
+                <terrain x="14" y="12" type="Desert" />
+                <terrain x="14" y="13" type="Water" />
+                <terrain x="14" y="14" type="Water" />
+                <terrain x="15" y="1" type="Plains" />
+                <terrain x="15" y="2" type="Plains" />
+                <terrain x="15" y="3" type="Plains" />
+                <terrain x="15" y="4" type="Plains" />
+                <terrain x="15" y="5" type="Plains" />
+                <terrain x="15" y="6" type="Plains" />
+                <terrain x="15" y="7" type="Plains" />
+                <terrain x="15" y="8" type="Plains" />
+                <terrain x="15" y="9" type="Plains" />
+                <terrain x="15" y="10" type="Plains" />
+                <terrain x="15" y="11" type="Plains" />
+                <terrain x="15" y="12" type="Desert" />
+                <terrain x="15" y="13" type="Water" />
+                <terrain x="15" y="14" type="Water" />
+                <terrain x="16" y="0" type="Base" />
+                <terrain x="16" y="1" type="Plains" />
+                <terrain x="16" y="2" type="Plains" />
+                <terrain x="16" y="3" type="Plains" />
+                <terrain x="16" y="4" type="Plains" />
+                <terrain x="16" y="5" type="Plains" />
+                <terrain x="16" y="6" type="Plains" />
+                <terrain x="16" y="7" type="Plains" />
+                <terrain x="16" y="8" type="Plains" />
+                <terrain x="16" y="9" type="Plains" />
+                <terrain x="16" y="10" type="Plains" />
+                <terrain x="16" y="11" type="Desert" />
+                <terrain x="16" y="12" type="Desert" />
+                <terrain x="16" y="13" type="Water" />
+                <terrain x="16" y="14" type="Water" />
+                <terrain x="17" y="0" type="Mountains" />
+                <terrain x="17" y="1" type="Plains" />
+                <terrain x="17" y="2" type="Plains" />
+                <terrain x="17" y="3" type="Plains" />
+                <terrain x="17" y="4" type="Plains" />
+                <terrain x="17" y="5" type="Plains" />
+                <terrain x="17" y="6" type="Plains" />
+                <terrain x="17" y="7" type="Plains" />
+                <terrain x="17" y="8" type="Plains" />
+                <terrain x="17" y="9" type="Plains" />
+                <terrain x="17" y="10" type="Desert" />
+                <terrain x="17" y="11" type="Water" />
+                <terrain x="17" y="12" type="Water" />
+                <terrain x="17" y="13" type="Water" />
+                <terrain x="17" y="14" type="Water" />
+                <terrain x="18" y="1" type="Plains" />
+                <terrain x="18" y="2" type="Plains" />
+                <terrain x="18" y="3" type="Mountains" />
+                <terrain x="18" y="4" type="Plains" />
+                <terrain x="18" y="5" type="Plains" />
+                <terrain x="18" y="6" type="Plains" />
+                <terrain x="18" y="7" type="Plains" />
+                <terrain x="18" y="8" type="Plains" />
+                <terrain x="18" y="9" type="Plains" />
+                <terrain x="18" y="10" type="Plains" />
+                <terrain x="18" y="11" type="Water" />
+                <terrain x="18" y="12" type="Water" />
+                <terrain x="18" y="13" type="Water" />
+                <terrain x="19" y="0" type="Woods" />
+                <terrain x="19" y="1" type="Woods" />
+                <terrain x="19" y="2" type="Mountains" />
+                <terrain startUnit="Trooper" startUnitOwner="0" startFaction="0" x="19" y="3" type="Base" />
+                <terrain x="19" y="4" type="Plains" />
+                <terrain x="19" y="5" type="Mountains" />
+                <terrain x="19" y="6" type="Mountains" />
+                <terrain x="19" y="7" type="Plains" />
+                <terrain x="19" y="8" type="Plains" />
+                <terrain x="19" y="9" type="Plains" />
+                <terrain x="19" y="10" type="Plains" />
+                <terrain x="19" y="11" type="Water" />
+                <terrain x="19" y="12" type="Water" />
+                <terrain x="20" y="0" type="Woods" />
+                <terrain x="20" y="1" type="Woods" />
+                <terrain x="20" y="2" type="Woods" />
+                <terrain x="20" y="3" type="Mountains" />
+                <terrain x="20" y="4" type="Plains" />
+                <terrain x="20" y="5" type="Woods" />
+                <terrain x="20" y="6" type="Plains" />
+                <terrain x="20" y="7" type="Mountains" />
+                <terrain x="20" y="8" type="Plains" />
+                <terrain x="20" y="9" type="Mountains" />
+                <terrain x="20" y="10" type="Plains" />
+                <terrain x="20" y="11" type="Water" />
+                <terrain x="20" y="12" type="Water" />
+                <terrain x="21" y="2" type="Woods" />
+                <terrain x="21" y="3" type="Woods" />
+                <terrain x="21" y="4" type="Woods" />
+                <terrain x="21" y="6" type="Woods" />
+                <terrain x="21" y="7" type="Woods" />
+                <terrain x="21" y="8" type="Plains" />
+                <terrain x="21" y="10" type="Mountains" />
+                <terrain x="21" y="11" type="Plains" />
+                <terrain x="21" y="12" type="Water" />
+            </terrains>
+        </map>
+        """
+        expected = {
+            'terrains': [
+                {'y': 7, 'x': 0, 'type': 'Plains'}, 
+                {'y': 8, 'x': 0, 'type': 'Woods'}, 
+                {'y': 9, 'x': 0, 'type': 'Woods'}, 
+                {'y': 3, 'x': 1, 'type': 'Plains'}, 
+                {'y': 5, 'x': 1, 'type': 'Mountains'}, 
+                {'y': 6, 'x': 1, 'type': 'Plains'}, 
+                {'y': 7, 'x': 1, 'type': 'Woods'}, 
+                {'y': 8, 'x': 1, 'type': 'Mountains'}, 
+                {'y': 9, 'x': 1, 'type': 'Woods'}, 
+                {'y': 10, 'x': 1, 'type': 'Woods'}, 
+                {'y': 3, 'x': 2, 'type': 'Water'}, 
+                {'y': 4, 'x': 2, 'type': 'Plains'}, 
+                {'y': 5, 'x': 2, 'type': 'Plains'}, 
+                {'y': 6, 'x': 2, 'type': 'Plains'}, 
+                {'y': 7, 'x': 2, 'type': 'Plains'}, 
+                {'y': 8, 'x': 2, 'type': 'Plains'}, 
+                {'y': 9, 'x': 2, 'type': 'Plains'}, 
+                {'y': 10, 'x': 2, 'type': 'Woods'}, 
+                {'y': 11, 'x': 2, 'type': 'Woods'}, 
+                {'y': 2, 'x': 3, 'type': 'Water'}, 
+                {'y': 3, 'x': 3, 'type': 'Water'}, 
+                {'y': 4, 'x': 3, 'type': 'Plains'}, 
+                {'y': 5, 'x': 3, 'type': 'Plains'}, 
+                {'y': 6, 'x': 3, 'type': 'Plains'}, 
+                {'y': 7, 'x': 3, 'type': 'Plains'}, 
+                {'startFaction': 1, 'startUnitOwner': '1', 'y': 8, 'x': 3, 'type': 'Base', 'startUnit': 'Trooper'}, 
+                {'y': 9, 'x': 3, 'type': 'Mountains'}, 
+                {'y': 10, 'x': 3, 'type': 'Woods'}, 
+                {'y': 11, 'x': 3, 'type': 'Mountains'}, 
+                {'y': 12, 'x': 3, 'type': 'Woods'}, 
+                {'y': 13, 'x': 3, 'type': 'Woods'}, 
+                {'y': 2, 'x': 4, 'type': 'Water'}, 
+                {'y': 3, 'x': 4, 'type': 'Water'}, 
+                {'y': 4, 'x': 4, 'type': 'Desert'}, 
+                {'y': 5, 'x': 4, 'type': 'Plains'}, 
+                {'y': 6, 'x': 4, 'type': 'Plains'}, 
+                {'y': 7, 'x': 4, 'type': 'Plains'}, 
+                {'y': 8, 'x': 4, 'type': 'Mountains'}, 
+                {'y': 9, 'x': 4, 'type': 'Plains'}, 
+                {'y': 10, 'x': 4, 'type': 'Plains'}, 
+                {'y': 11, 'x': 4, 'type': 'Plains'}, 
+                {'y': 12, 'x': 4, 'type': 'Mountains'}, 
+                {'y': 13, 'x': 4, 'type': 'Woods'}, 
+                {'y': 2, 'x': 5, 'type': 'Water'}, 
+                {'y': 3, 'x': 5, 'type': 'Water'}, 
+                {'y': 4, 'x': 5, 'type': 'Desert'}, 
+                {'y': 5, 'x': 5, 'type': 'Desert'}, 
+                {'y': 6, 'x': 5, 'type': 'Plains'}, 
+                {'y': 7, 'x': 5, 'type': 'Plains'}, 
+                {'y': 8, 'x': 5, 'type': 'Plains'}, 
+                {'y': 9, 'x': 5, 'type': 'Plains'}, 
+                {'y': 10, 'x': 5, 'type': 'Plains'}, 
+                {'y': 11, 'x': 5, 'type': 'Plains'}, 
+                {'y': 12, 'x': 5, 'type': 'Plains'}, 
+                {'y': 13, 'x': 5, 'type': 'Plains'}, 
+                {'y': 14, 'x': 5, 'type': 'Plains'}, 
+                {'y': 3, 'x': 6, 'type': 'Water'}, 
+                {'y': 4, 'x': 6, 'type': 'Water'}, 
+                {'y': 5, 'x': 6, 'type': 'Desert'}, 
+                {'y': 6, 'x': 6, 'type': 'Plains'}, 
+                {'y': 7, 'x': 6, 'type': 'Plains'}, 
+                {'y': 8, 'x': 6, 'type': 'Plains'}, 
+                {'y': 9, 'x': 6, 'type': 'Plains'}, 
+                {'y': 10, 'x': 6, 'type': 'Plains'}, 
+                {'y': 11, 'x': 6, 'type': 'Plains'}, 
+                {'y': 12, 'x': 6, 'type': 'Plains'}, 
+                {'y': 13, 'x': 6, 'type': 'Plains'}, 
+                {'y': 14, 'x': 6, 'type': 'Base'}, 
+                {'y': 2, 'x': 7, 'type': 'Water'}, 
+                {'y': 3, 'x': 7, 'type': 'Water'}, 
+                {'y': 4, 'x': 7, 'type': 'Desert'}, 
+                {'y': 5, 'x': 7, 'type': 'Plains'}, 
+                {'y': 6, 'x': 7, 'type': 'Plains'}, 
+                {'y': 7, 'x': 7, 'type': 'Plains'}, 
+                {'y': 8, 'x': 7, 'type': 'Plains'}, 
+                {'y': 9, 'x': 7, 'type': 'Plains'}, 
+                {'y': 10, 'x': 7, 'type': 'Plains'}, 
+                {'y': 11, 'x': 7, 'type': 'Plains'}, 
+                {'y': 12, 'x': 7, 'type': 'Plains'}, 
+                {'y': 13, 'x': 7, 'type': 'Plains'}, 
+                {'y': 14, 'x': 7, 'type': 'Mountains'}, 
+                {'y': 1, 'x': 8, 'type': 'Water'}, 
+                {'y': 2, 'x': 8, 'type': 'Water'}, 
+                {'y': 3, 'x': 8, 'type': 'Desert'}, 
+                {'y': 4, 'x': 8, 'type': 'Desert'}, 
+                {'y': 5, 'x': 8, 'type': 'Plains'}, 
+                {'y': 6, 'x': 8, 'type': 'Plains'}, 
+                {'y': 7, 'x': 8, 'type': 'Plains'}, 
+                {'y': 8, 'x': 8, 'type': 'Plains'}, 
+                {'y': 9, 'x': 8, 'type': 'Plains'}, 
+                {'y': 10, 'x': 8, 'type': 'Plains'}, 
+                {'y': 11, 'x': 8, 'type': 'Plains'}, 
+                {'y': 12, 'x': 8, 'type': 'Plains'}, 
+                {'y': 13, 'x': 8, 'type': 'Plains'}, 
+                {'y': 14, 'x': 8, 'type': 'Plains'}, 
+                {'y': 0, 'x': 9, 'type': 'Water'}, 
+                {'y': 1, 'x': 9, 'type': 'Water'}, 
+                {'y': 2, 'x': 9, 'type': 'Water'}, 
+                {'y': 3, 'x': 9, 'type': 'Desert'}, 
+                {'y': 4, 'x': 9, 'type': 'Water'}, 
+                {'y': 5, 'x': 9, 'type': 'Water'}, 
+                {'y': 6, 'x': 9, 'type': 'Plains'}, 
+                {'y': 7, 'x': 9, 'type': 'Woods'}, 
+                {'y': 8, 'x': 9, 'type': 'Plains'}, 
+                {'y': 9, 'x': 9, 'type': 'Plains'}, 
+                {'y': 10, 'x': 9, 'type': 'Plains'}, 
+                {'y': 11, 'x': 9, 'type': 'Plains'}, 
+                {'y': 12, 'x': 9, 'type': 'Plains'}, 
+                {'y': 13, 'x': 9, 'type': 'Plains'}, 
+                {'y': 14, 'x': 9, 'type': 'Mountains'}, 
+                {'y': 0, 'x': 10, 'type': 'Water'}, 
+                {'y': 1, 'x': 10, 'type': 'Desert'}, 
+                {'y': 2, 'x': 10, 'type': 'Desert'}, 
+                {'y': 3, 'x': 10, 'type': 'Plains'}, 
+                {'y': 4, 'x': 10, 'type': 'Desert'}, 
+                {'y': 5, 'x': 10, 'type': 'Water'}, 
+                {'y': 6, 'x': 10, 'type': 'Desert'}, 
+                {'y': 7, 'x': 10, 'type': 'Desert'}, 
+                {'y': 8, 'x': 10, 'type': 'Woods'}, 
+                {'y': 9, 'x': 10, 'type': 'Plains'}, 
+                {'y': 10, 'x': 10, 'type': 'Plains'}, 
+                {'y': 11, 'x': 10, 'type': 'Plains'}, 
+                {'y': 12, 'x': 10, 'type': 'Plains'}, 
+                {'startFaction': 1, 'startUnitOwner': '1', 'y': 13, 'x': 10, 'type': 'Base', 'startUnit': 'Trooper'}, 
+                {'y': 14, 'x': 10, 'type': 'Desert'}, 
+                {'y': 0, 'x': 11, 'type': 'Desert'}, 
+                {'y': 1, 'x': 11, 'type': 'Plains'}, 
+                {'y': 2, 'x': 11, 'type': 'Plains'}, 
+                {'y': 3, 'x': 11, 'type': 'Mountains'}, 
+                {'y': 4, 'x': 11, 'type': 'Plains'}, 
+                {'y': 5, 'x': 11, 'type': 'Mountains'}, 
+                {'y': 6, 'x': 11, 'type': 'Water'}, 
+                {'y': 7, 'x': 11, 'type': 'Plains'}, 
+                {'y': 8, 'x': 11, 'type': 'Plains'}, 
+                {'y': 9, 'x': 11, 'type': 'Desert'}, 
+                {'y': 10, 'x': 11, 'type': 'Mountains'}, 
+                {'y': 11, 'x': 11, 'type': 'Desert'}, 
+                {'y': 12, 'x': 11, 'type': 'Mountains'}, 
+                {'y': 13, 'x': 11, 'type': 'Desert'}, 
+                {'y': 14, 'x': 11, 'type': 'Desert'}, 
+                {'y': 0, 'x': 12, 'type': 'Plains'}, 
+                {'y': 1, 'x': 12, 'type': 'Plains'}, 
+                {'startFaction': 0, 'startUnitOwner': '0', 'y': 2, 'x': 12, 'type': 'Base', 'startUnit': 'Trooper'}, 
+                {'y': 3, 'x': 12, 'type': 'Plains'}, 
+                {'y': 4, 'x': 12, 'type': 'Plains'}, 
+                {'y': 5, 'x': 12, 'type': 'Plains'}, 
+                {'y': 6, 'x': 12, 'type': 'Mountains'}, 
+                {'y': 7, 'x': 12, 'type': 'Plains'}, 
+                {'y': 8, 'x': 12, 'type': 'Plains'}, 
+                {'y': 9, 'x': 12, 'type': 'Water'}, 
+                {'y': 10, 'x': 12, 'type': 'Water'}, 
+                {'y': 11, 'x': 12, 'type': 'Water'}, 
+                {'y': 12, 'x': 12, 'type': 'Desert'}, 
+                {'y': 13, 'x': 12, 'type': 'Water'}, 
+                {'y': 14, 'x': 12, 'type': 'Water'}, 
+                {'y': 0, 'x': 13, 'type': 'Mountains'}, 
+                {'y': 1, 'x': 13, 'type': 'Plains'}, 
+                {'y': 2, 'x': 13, 'type': 'Mountains'}, 
+                {'y': 3, 'x': 13, 'type': 'Plains'}, 
+                {'y': 4, 'x': 13, 'type': 'Plains'}, 
+                {'y': 5, 'x': 13, 'type': 'Plains'}, 
+                {'y': 6, 'x': 13, 'type': 'Plains'}, 
+                {'y': 7, 'x': 13, 'type': 'Plains'}, 
+                {'y': 8, 'x': 13, 'type': 'Woods'}, 
+                {'y': 9, 'x': 13, 'type': 'Woods'}, 
+                {'y': 10, 'x': 13, 'type': 'Desert'}, 
+                {'y': 11, 'x': 13, 'type': 'Water'}, 
+                {'y': 12, 'x': 13, 'type': 'Desert'}, 
+                {'y': 13, 'x': 13, 'type': 'Water'}, 
+                {'y': 14, 'x': 13, 'type': 'Water'}, 
+                {'y': 0, 'x': 14, 'type': 'Mountains'}, 
+                {'y': 1, 'x': 14, 'type': 'Plains'}, 
+                {'y': 2, 'x': 14, 'type': 'Plains'}, 
+                {'y': 3, 'x': 14, 'type': 'Plains'}, 
+                {'y': 4, 'x': 14, 'type': 'Plains'}, 
+                {'y': 5, 'x': 14, 'type': 'Plains'}, 
+                {'y': 6, 'x': 14, 'type': 'Plains'}, 
+                {'y': 7, 'x': 14, 'type': 'Plains'}, 
+                {'y': 8, 'x': 14, 'type': 'Plains'}, 
+                {'y': 9, 'x': 14, 'type': 'Plains'}, 
+                {'y': 10, 'x': 14, 'type': 'Plains'}, 
+                {'y': 11, 'x': 14, 'type': 'Desert'}, 
+                {'y': 12, 'x': 14, 'type': 'Desert'}, 
+                {'y': 13, 'x': 14, 'type': 'Water'}, 
+                {'y': 14, 'x': 14, 'type': 'Water'}, 
+                {'y': 1, 'x': 15, 'type': 'Plains'}, 
+                {'y': 2, 'x': 15, 'type': 'Plains'}, 
+                {'y': 3, 'x': 15, 'type': 'Plains'}, 
+                {'y': 4, 'x': 15, 'type': 'Plains'}, 
+                {'y': 5, 'x': 15, 'type': 'Plains'}, 
+                {'y': 6, 'x': 15, 'type': 'Plains'}, 
+                {'y': 7, 'x': 15, 'type': 'Plains'}, 
+                {'y': 8, 'x': 15, 'type': 'Plains'}, 
+                {'y': 9, 'x': 15, 'type': 'Plains'}, 
+                {'y': 10, 'x': 15, 'type': 'Plains'}, 
+                {'y': 11, 'x': 15, 'type': 'Plains'}, 
+                {'y': 12, 'x': 15, 'type': 'Desert'}, 
+                {'y': 13, 'x': 15, 'type': 'Water'}, 
+                {'y': 14, 'x': 15, 'type': 'Water'}, 
+                {'y': 0, 'x': 16, 'type': 'Base'}, 
+                {'y': 1, 'x': 16, 'type': 'Plains'}, 
+                {'y': 2, 'x': 16, 'type': 'Plains'}, 
+                {'y': 3, 'x': 16, 'type': 'Plains'}, 
+                {'y': 4, 'x': 16, 'type': 'Plains'}, 
+                {'y': 5, 'x': 16, 'type': 'Plains'}, 
+                {'y': 6, 'x': 16, 'type': 'Plains'}, 
+                {'y': 7, 'x': 16, 'type': 'Plains'}, 
+                {'y': 8, 'x': 16, 'type': 'Plains'}, 
+                {'y': 9, 'x': 16, 'type': 'Plains'}, 
+                {'y': 10, 'x': 16, 'type': 'Plains'}, 
+                {'y': 11, 'x': 16, 'type': 'Desert'}, 
+                {'y': 12, 'x': 16, 'type': 'Desert'}, 
+                {'y': 13, 'x': 16, 'type': 'Water'}, 
+                {'y': 14, 'x': 16, 'type': 'Water'}, 
+                {'y': 0, 'x': 17, 'type': 'Mountains'}, 
+                {'y': 1, 'x': 17, 'type': 'Plains'}, 
+                {'y': 2, 'x': 17, 'type': 'Plains'}, 
+                {'y': 3, 'x': 17, 'type': 'Plains'}, 
+                {'y': 4, 'x': 17, 'type': 'Plains'}, 
+                {'y': 5, 'x': 17, 'type': 'Plains'}, 
+                {'y': 6, 'x': 17, 'type': 'Plains'}, 
+                {'y': 7, 'x': 17, 'type': 'Plains'}, 
+                {'y': 8, 'x': 17, 'type': 'Plains'}, 
+                {'y': 9, 'x': 17, 'type': 'Plains'}, 
+                {'y': 10, 'x': 17, 'type': 'Desert'}, 
+                {'y': 11, 'x': 17, 'type': 'Water'}, 
+                {'y': 12, 'x': 17, 'type': 'Water'}, 
+                {'y': 13, 'x': 17, 'type': 'Water'}, 
+                {'y': 14, 'x': 17, 'type': 'Water'}, 
+                {'y': 1, 'x': 18, 'type': 'Plains'}, 
+                {'y': 2, 'x': 18, 'type': 'Plains'}, 
+                {'y': 3, 'x': 18, 'type': 'Mountains'}, 
+                {'y': 4, 'x': 18, 'type': 'Plains'}, 
+                {'y': 5, 'x': 18, 'type': 'Plains'}, 
+                {'y': 6, 'x': 18, 'type': 'Plains'}, 
+                {'y': 7, 'x': 18, 'type': 'Plains'}, 
+                {'y': 8, 'x': 18, 'type': 'Plains'}, 
+                {'y': 9, 'x': 18, 'type': 'Plains'}, 
+                {'y': 10, 'x': 18, 'type': 'Plains'}, 
+                {'y': 11, 'x': 18, 'type': 'Water'}, 
+                {'y': 12, 'x': 18, 'type': 'Water'}, 
+                {'y': 13, 'x': 18, 'type': 'Water'}, 
+                {'y': 0, 'x': 19, 'type': 'Woods'}, 
+                {'y': 1, 'x': 19, 'type': 'Woods'}, 
+                {'y': 2, 'x': 19, 'type': 'Mountains'}, 
+                {'startFaction': 0, 'startUnitOwner': '0', 'y': 3, 'x': 19, 'type': 'Base', 'startUnit': 'Trooper'}, 
+                {'y': 4, 'x': 19, 'type': 'Plains'}, 
+                {'y': 5, 'x': 19, 'type': 'Mountains'}, 
+                {'y': 6, 'x': 19, 'type': 'Mountains'}, 
+                {'y': 7, 'x': 19, 'type': 'Plains'}, 
+                {'y': 8, 'x': 19, 'type': 'Plains'}, 
+                {'y': 9, 'x': 19, 'type': 'Plains'}, 
+                {'y': 10, 'x': 19, 'type': 'Plains'}, 
+                {'y': 11, 'x': 19, 'type': 'Water'}, 
+                {'y': 12, 'x': 19, 'type': 'Water'}, 
+                {'y': 0, 'x': 20, 'type': 'Woods'}, 
+                {'y': 1, 'x': 20, 'type': 'Woods'}, 
+                {'y': 2, 'x': 20, 'type': 'Woods'}, 
+                {'y': 3, 'x': 20, 'type': 'Mountains'}, 
+                {'y': 4, 'x': 20, 'type': 'Plains'}, 
+                {'y': 5, 'x': 20, 'type': 'Woods'}, 
+                {'y': 6, 'x': 20, 'type': 'Plains'}, 
+                {'y': 7, 'x': 20, 'type': 'Mountains'}, 
+                {'y': 8, 'x': 20, 'type': 'Plains'}, 
+                {'y': 9, 'x': 20, 'type': 'Mountains'}, 
+                {'y': 10, 'x': 20, 'type': 'Plains'}, 
+                {'y': 11, 'x': 20, 'type': 'Water'}, 
+                {'y': 12, 'x': 20, 'type': 'Water'}, 
+                {'y': 2, 'x': 21, 'type': 'Woods'}, 
+                {'y': 3, 'x': 21, 'type': 'Woods'}, 
+                {'y': 4, 'x': 21, 'type': 'Woods'}, 
+                {'y': 6, 'x': 21, 'type': 'Woods'}, 
+                {'y': 7, 'x': 21, 'type': 'Woods'}, 
+                {'y': 8, 'x': 21, 'type': 'Plains'}, 
+                {'y': 10, 'x': 21, 'type': 'Mountains'}, 
+                {'y': 11, 'x': 21, 'type': 'Plains'}, 
+                {'y': 12, 'x': 21, 'type': 'Water'}
+            ], 
+            'name': 'One on one', 
+            'creator': 'alex', 
+            'url': 'http://weewar.com/map/8', 
+            'creatorProfile': 'http://weewar.com/user/alex', 
+            'maxPlayers': 2, 
+            'height': 15, 
+            'width': 22, 
+            'id': 8, 
+            'perBaseCredits': 100, 
+            'preview': 
+            'http://weewar.com/images/maps/preview_8_ir3.png', 
+            'initialCredits': 300, 
+            'thumbnail': 'http://weewar.com/images/maps/boardThumb_8_ir3.png', 
+            'revision': 2
+        }
+        self.api._call_api = lambda a, b=None: self.parsed_xml(xml)
+        self.assertEqual(self.api.map_layout(1234), expected) 
+
+
 def compare(dict1, dict2):
     keys = set(dict1.keys()) & set(dict2.keys())
     if set(dict1.keys()) != keys:
@@ -370,7 +1171,7 @@ def compare(dict1, dict2):
         print 'missing in dict2:', list(set(dict2.keys()) - keys)
     for key in keys:
         if dict1[key] != dict2[key]:
-            print '[%r]: %r != %r' % (key, dict1[key], dict2[key])
+            print '__%s__\n  %r\n  %r' % (key, dict1[key], dict2[key])
 
 if __name__ == '__main__':
     unittest.main()
