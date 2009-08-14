@@ -471,6 +471,8 @@ class AuthenticationError (Exception):
     The submitted user credentials were not correct.
     """
 
+TANK = 'Tank'
+
 class ELIZA (ReadOnlyAPI):
 
     """
@@ -698,12 +700,22 @@ class ELIZA (ReadOnlyAPI):
         Sends a (preferably polite) message.
         """
         node = self._game_command(game_id, self.ELEMENT.chat(msg))
-        return node
+        return True
 
     def build(self, game_id, x, y, type):
-        node = self._game_command(game_id, self.ELEMENT.build(
-                x=str(x), y=str(y), type=type))
-        return node
+        """
+        Builds a unit are a specific location of the map.
+        """
+        try:
+            node = self._game_command(game_id, self.ELEMENT.build(
+                    x=str(x), y=str(y), type=str(type)))
+            return node.tag == 'ok'
+        except ELIZAError, e:
+            # <?xml version="1.0" ?><error>Cannot build any more units in this turn on this coordinate.</error>
+            # <?xml version="1.0" ?><error>Not enough credits.</error>
+            # <?xml version="1.0" ?><error>This Terrain cannot build the requested unit.</error>
+            # <?xml version="1.0" ?><error>Blocked by a unit.</error>
+            return False
 
 class UserNotFound (Exception):
     """
@@ -988,8 +1000,26 @@ def chat(username, apikey, game_id, msg):
     @type msg: str
     """
     api = ELIZA(username, apikey)
-    node = api.chat(game_id, msg)
-    return True
+    return api.chat(game_id, msg)
+
+def build(username, apikey, game_id, x, y, unit):
+    """
+    Sends a chat message to the game board.
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param game_id: Unique ID of weewar game.
+    @type game_id: int
+    @param x: X-position on map.
+    @type x: int
+    @param y: Y-position on map.
+    @type y: int
+    @param unit: Unit type to build.
+    @type unit: str
+    """
+    api = ELIZA(username, apikey)
+    return api.build(game_id, x, y, unit)
 
 #} shortcuts/wrapper functions
 
@@ -1009,7 +1039,7 @@ if __name__ == '__main__':
 #    print latest_maps()
 #    print headquarter(user, key)
 
-    game_id = 186125
+    game_id = 186136
 #    print game_state(user, key, game_id)
 #    print map_layout(8)
 #    print finish_turn(user, key, game_id)
@@ -1020,7 +1050,7 @@ if __name__ == '__main__':
 #    print abandon_game(user, key, game_id)
 #    print remove_game(user, key, game_id)
 #    print chat(user, key, game_id, 'bla'*10)
+    print build(user, key, game_id, 4, 14, TANK)
 
     api = ELIZA(user, key)
-#    print api.build(game_id, 1, 1, 'tank')
 
