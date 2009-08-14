@@ -62,6 +62,7 @@ from urllib2 import Request, urlopen, HTTPError
 import base64
 from lxml import etree
 from lxml import objectify
+from lxml.etree import tostring
 
 __all__ = [
     'game', 'open_games', 'all_users', 'user', 'latest_maps', 'headquarter',
@@ -656,7 +657,6 @@ class ELIZA (ReadOnlyAPI):
     ELEMENT = objectify.ElementMaker(annotate=False, nsmap={})
 
     def _game_command(self, game_id, node):
-        from lxml.etree import tostring
         game = self.ELEMENT.weewar(game=str(game_id))
         game.append(node)
         print tostring(game, pretty_print=True)
@@ -667,19 +667,34 @@ class ELIZA (ReadOnlyAPI):
             elif node.text == 'Not your turn.':
                 raise NotYourTurn
             else:
-                Exception(tostring(node, pretty_print=True))
+                raise ELIZAError(node)
         # otherwise return parsed XML node
         return node
 
-    def finish_turn(self, game_id):
+    #{ simple game commands
+    FINISH_TURN = 'finishTurn'
+    ACCEPT_INVITATION = 'acceptInvitation'
+    DECLINE_INVITATION = 'declineInvitation'
+    SEND_REMINDER = 'sendReminder'
+    SURRENDER = 'surrender'
+    ABANDON = 'abandon'
+    REMOVE_GAME = 'removeGame'
+
+    def _simple_game_command(self, game_id, cmd):
         """
-        Finishes turn in game C{game_id}.
+        Send a simple commad to the API. A simple command usually consists of 
+        only one element.
         """
-        try:
-            node = self._game_command(game_id, self.ELEMENT.finishTurn())
-            return True
-        except NotYourTurn:
-            return False
+        node = getattr(self.ELEMENT, cmd)()
+        return self._game_command(game_id, node)
+    #} simple game commands
+
+    def chat(self, game_id, msg):
+        """
+        Sends a (preferably polite) message.
+        """
+        node = self._game_command(game_id, self.ELEMENT.chat(msg))
+        return node
 
     def build(self, game_id, x, y, type):
         node = self._game_command(game_id, self.ELEMENT.build(
@@ -700,6 +715,15 @@ class MapNotFound (Exception):
     """
     The specified weewar map could not be found.
     """
+
+class ELIZAError (Exception):
+    """
+    Generic ELIZA exception which is raised when a <error> element is returned.
+    """
+    def __init__(self, node):
+        self.node = node
+    def __str__(self):
+        return tostring(self.node)
 
 class NotYourGame (Exception):
     """
@@ -801,12 +825,176 @@ def map_layout(id):
     api = ELIZA()
     return api.map_layout(id)
     
+
+def finish_turn(username, apikey, id):
+    """
+    Finishes turn in game.
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param id: Unique ID of weewar game.
+    @type id: int
+    @rtype: bool
+    """
+    try:
+        api = ELIZA(username, apikey)
+        node = api._simple_game_command(id, api.FINISH_TURN)
+        return node.tag == 'ok'
+    except NotYourTurn:
+        return False
+
+def accept_invitation(username, apikey, id):
+    """
+    Accepts invitation to game.
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param id: Unique ID of weewar game.
+    @type id: int
+    @rtype: bool
+    """
+    try:
+        api = ELIZA(username, apikey)
+        node = api._simple_game_command(id, api.ACCEPT_INVITATION)
+        return node.tag == 'ok'
+    except ELIZAError, e:
+        if e.node.text == 'You have already accepted the invitation.':
+            return False
+        else:
+            raise
+
+def decline_invitation(username, apikey, id):
+    """
+    Declines invitation to game.
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param id: Unique ID of weewar game.
+    @type id: int
+    @rtype: bool
+    """
+    try:
+        api = ELIZA(username, apikey)
+        node = api._simple_game_command(id, api.DECLINE_INVITATION)
+        return node.tag == 'ok'
+    except ELIZAError, e:
+        if e.node.text == 'Cannot decline an invitation.':
+            return False
+        else:
+            raise
+
+def send_reminder(username, apikey, id):
+    """
+    Sends a reminder about the game.
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param id: Unique ID of weewar game.
+    @type id: int
+    @rtype: bool
+    """
+    try:
+        api = ELIZA(username, apikey)
+        node = api._simple_game_command(id, api.SEND_REMINDER)
+        return node.tag == 'ok'
+    except ELIZAError, e:
+        if e.node.text == 'Can not remind current player.':
+            return False
+        else:
+            raise
+
+def surrender_game(username, apikey, id):
+    """
+    Surrender!
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param id: Unique ID of weewar game.
+    @type id: int
+    @rtype: bool
+    """
+    try:
+        api = ELIZA(username, apikey)
+        node = api._simple_game_command(id, api.SURRENDER)
+        return node.tag == 'ok'
+    except ELIZAError, e:
+        if e.node.text in ['Can not surrender.',
+                           'Game is not running.']:
+            return False
+        else:
+            raise
+
+def abandon_game(username, apikey, id):
+    """
+    Abondons game.
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param id: Unique ID of weewar game.
+    @type id: int
+    @rtype: bool
+    """
+    try:
+        api = ELIZA(username, apikey)
+        node = api._simple_game_command(id, api.ABANDON)
+        return node.tag == 'ok'
+    except ELIZAError, e:
+        if e.node.text == 'Game is not running.':
+            return False
+        else:
+            raise
+
+def remove_game(username, apikey, id):
+    """
+    Removes game.
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param id: Unique ID of weewar game.
+    @type id: int
+    @rtype: bool
+    """
+    try:
+        api = ELIZA(username, apikey)
+        node = api._simple_game_command(id, api.REMOVE_GAME)
+        return node.tag == 'ok'
+    except ELIZAError, e:
+        if e.node.text == 'Game has already been deleted.':
+            return False
+        else:
+            raise
+
+def chat(username, apikey, game_id, msg):
+    """
+    Sends a chat message to the game board.
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param game_id: Unique ID of weewar game.
+    @type game_id: int
+    @param msg: Message
+    @type msg: str
+    """
+    api = ELIZA(username, apikey)
+    node = api.chat(game_id, msg)
+    return True
+
 #} shortcuts/wrapper functions
 
 if __name__ == '__main__':
+
     import os.path
     keys = open(os.path.expanduser('~/.weewar-apikey')).readlines()
     user, key = keys.pop(0).strip().split(':')
+
 #    print open_games()
 #    print all_users()
 #    u = user(user)
@@ -816,10 +1004,19 @@ if __name__ == '__main__':
 #        print ' - %(name)s (%(url)s)' % game(g['id'])
 #    print latest_maps()
 #    print headquarter(user, key)
-#    print game_state(user, key, 186078)
-#    print map_layout(8)
 
-#    api = ELIZA(user, key)
-#    print api.finish_turn(186078)
-#    print api.build(186078, 1, 1, 'tank')
+    game_id = 186125
+#    print game_state(user, key, game_id)
+#    print map_layout(8)
+#    print finish_turn(user, key, game_id)
+#    print accept_invitation(user, key, game_id)
+#    print decline_invitation(user, key, game_id)
+#    print send_reminder(user, key, game_id)
+#    print surrender_game(user, key, game_id)
+#    print abandon_game(user, key, game_id)
+#    print remove_game(user, key, game_id)
+#    print chat(user, key, game_id, 'bla'*10)
+
+    api = ELIZA(user, key)
+#    print api.build(game_id, 1, 1, 'tank')
 
