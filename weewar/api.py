@@ -57,6 +57,8 @@ At the moment support for commands still needs to be implemented.
 """
 
 from urllib2 import Request, urlopen, HTTPError
+#from urllib2 import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
+#from urllib2 import build_opener, install_opener
 import base64
 from lxml import etree
 from lxml import objectify
@@ -98,24 +100,39 @@ class ReadOnlyAPI (object):
         self.username = username
         self.apikey = apikey
 
-    def _call_api(self, url, authentication=False):
+        #if username is not None:
+        #    manager = HTTPPasswordMgrWithDefaultRealm()
+        #    manager.add_password('users', 'weewar.com', username, apikey)
+        #    opener = build_opener(HTTPBasicAuthHandler(manager))
+        #    opener.addheaders = [
+        #        ('Content-Type', 'application/xml'), 
+        #        ('Accept', 'application/xml')
+        #    ]
+        #    install_opener(opener)
+
+    def _call_api(self, url, authentication=False, data=None):
         """
         Calls the weewar API with authentication (if specified)
         """
-        #print 'opening %s...' % url
-        req = Request(url)
+        headers = {
+            'Content-Type' : 'application/xml',
+            'Accept' : 'application/xml',
+        }
 
         if authentication and self.username is not None:
             base64string = base64.encodestring(
                 '%s:%s' % (self.username, self.apikey))[:-1]
-            req.add_header("Authorization", "Basic %s" % base64string)
+            headers['Authorization'] = 'Basic %s' % base64string
+
+        #print 'opening %s...' % url
+        req = Request(url, data, headers)
 
         try:
             handle = urlopen(req)
-            return objectify.parse(handle).getroot()
-            #xml = handle.read()
-            #print xml
-            #return objectify.fromstring(xml)
+            #return objectify.parse(handle).getroot()
+            xml = handle.read()
+            print xml
+            return objectify.fromstring(xml)
         except HTTPError, e:
             # HTTP response 401: Unauthorized
             if e.code == 401: 
@@ -479,6 +496,8 @@ class ELIZA (ReadOnlyAPI):
         except HTTPError, e:
             if e.code==404:
                 raise GameNotFound(id)
+            elif e.code==403:
+                raise NotYourGame(id)
             else:
                 raise
 
@@ -633,202 +652,39 @@ class ELIZA (ReadOnlyAPI):
         values['terrains'] = map(_parse_terrain, node.terrains.iterchildren())
         return values
 
+    URL_ELIZA_COMMANDS = 'http://weewar.com/api1/eliza'
+    ELEMENT = objectify.ElementMaker(annotate=False, nsmap={})
 
-class ELIZA (ReadOnlyAPI):
+    def _game_command(self, game_id, node):
+        from lxml.etree import tostring
+        game = self.ELEMENT.weewar(game=str(game_id))
+        game.append(node)
+        print tostring(game, pretty_print=True)
+        node = self._call_api(self.URL_ELIZA_COMMANDS, True, tostring(game))
+        if node.tag == 'error':
+            if node.text == 'Game not found':
+                raise GameNotFound(game_id)
+            elif node.text == 'Not your turn.':
+                raise NotYourTurn
+            else:
+                Exception(tostring(node, pretty_print=True))
+        # otherwise return parsed XML node
+        return node
 
-    """
-    Weewar Bot-API (ELIZA)
-    ======================
-
-    In order for ELIZA to accept request the username MUST start with "ai_"
-    This is so bots are recognizable by the community as such.
-
-    You can not register a user name with a "_" in it at the moment, however
-    you can change the name in your settings after the initial registration to
-    comply with the Eliza requirements. The registration process will soon be
-    fixed accordingly.
-    """
-
-    URL_GAME_STATE = 'http://weewar.com/api1/gamestate/%s'
-
-    def game_state(self, id):
+    def finish_turn(self, game_id):
         """
-        Offers more information about the state of a game - an extended
-        version of L{game()}.
+        Finishes turn in game C{game_id}.
         """
         try:
-            root = self._call_api(self.URL_GAME_STATE % id, True)
-            return self._parse_game_state(root)
-        except HTTPError, e:
-            if e.code==404:
-                raise GameNotFound(id)
-            else:
-                raise
+            node = self._game_command(game_id, self.ELEMENT.finishTurn())
+            return True
+        except NotYourTurn:
+            return False
 
-    def _parse_attrs(self, node, **attrs):
-        """
-        """
-        values = {}
-        for key, type_ in attrs.items():
-            val = node.get(key, None)
-            if val is not None or type_ is bool:
-                if type_ is bool:
-                    values[key] = str(val).lower().strip() == 'true'
-                else:
-                    values[key] = type_(val)
-        return values
-
-    def _parse_game_state(self, node):
-        """
-        Returns a simple dict for a game state node.
-        Example XML::
-
-            <game>
-                <id>130915</id>
-                <name>test5</name>
-                <round>1</round>
-                <state>running</state>
-                <pendingInvites>false</pendingInvites>
-                <pace>86400</pace>
-                <type>Pro</type>
-                <url>http://weewar.com/game/130915</url>
-                <rated>false</rated>
-                <players>
-                    <player current='true' >xx</player>
-                    <player  >ai_xx</player>
-                </players>
-                <disabledUnitTypes>
-                    <type>Speedboat</type>
-                    <type>Battleship</type>
-                </disabledUnitTypes>
-                <map>34671</map>
-                <mapUrl>http://weewar.com/map/34671</mapUrl>
-                <creditsPerBase>100</creditsPerBase>
-                <initialCredits>200</initialCredits>
-                <playingSince>Sun Jan 04 07:40:47 UTC 2009</playingSince>
-                <factions>
-                    <faction current='true' playerId='36133' playerName='Gorbusch'  state='playing'  >
-                    <unit x='4' y='2' type='Trooper' quantity='10' finished='false'  />
-                    <unit x='2' y='4' type='Trooper' quantity='10' finished='false'  />
-                    <terrain x='0' y='0' type='Harbor' finished='false' />
-                    <terrain x='3' y='2' type='Base' finished='false' />
-                    <terrain x='2' y='2' type='Airfield' finished='false' />
-                    <terrain x='2' y='3' type='Base' finished='false' />
-                    </faction>
-                    <faction  playerId='52971' playerName='ai_Gorbusch' credits='200' state='playing'  > <!-- credit only available for your own faction -->
-                    <unit x='5' y='7' type='Trooper' quantity='10' finished='false'  /> <!--finished will only be set to true after all movements and attacks-->
-                    <unit x='7' y='5' type='Trooper' quantity='10' finished='false'  />
-                    <terrain x='6' y='7' type='Base' finished='false' /> <!-- finished seems not to be set at the moment for terrain -->
-                    <terrain x='9' y='9' type='Harbor' finished='false' />
-                    <terrain x='7' y='6' type='Base' finished='false' />
-                    <terrain x='7' y='7' type='Airfield' finished='false' />
-                    </faction>
-                </factions>
-            </game>
-        
-        """
-        complex_types = [
-            'players', 
-            'disabledUnitTypes',
-            'factions',
-        ]
-        #values = {}
-        #for child in node.iterchildren():
-        #    if child.tag not in complex_types:
-        #        print child.tag
-        #        values[child.tag] = child.pyval
-        values = dict(
-            (child.tag, child.pyval) 
-            for child in node.iterchildren()
-            if child.tag not in complex_types
-        )
-        values['disabledUnitTypes'] = [
-            child.pyval
-            for child in node.disabledUnitTypes.iterchildren()
-            if child.tag == 'type'
-        ]
-
-        def _parse_player(node):
-            values = self._parse_attrs(node, index=int, current=bool, result=str)
-            values['username'] = node.pyval
-            return values
-
-        values['players'] = map(_parse_player, node.players.iterchildren())
-
-        _parse_unit = lambda node: self._parse_attrs(node, x=int, y=int, 
-                                    type=str, quantity=int, finished=bool)
-        _parse_terrain = lambda node: self._parse_attrs(node, x=int, y=int, 
-                                    type=str, finished=bool)
-
-        def _parse_faction(node):
-            values = self._parse_attrs(node, playerId=int, playerName=str, 
-                                        credits=int, state=str, current=bool, 
-                                        result=str)
-            values['units'] = map(_parse_unit, node.findall('unit'))
-            values['terrain'] = map(_parse_terrain, node.findall('terrain'))
-            return values
-
-        values['factions'] = map(_parse_faction, node.factions.iterchildren())
-
-        return values 
-
-    URL_MAP_LAYOUT = 'http://weewar.com/api1/map/%s'
-
-    def map_layout(self, id):
-        """
-        Complete map layout.
-        """
-        try:
-            root = self._call_api(self.URL_MAP_LAYOUT % id)
-            return self._parse_map_layout(root)
-        except HTTPError, e:
-            if e.code==404:
-                raise MapNotFound(id)
-            else:
-                raise
-
-    def _parse_map_layout(self, node):
-        """
-        Returns a simple dict for a game state node.
-        Example XML::
-
-            <?xml version="1.0" encoding="UTF-8"?>
-            <map id="8">
-                <name>One on one</name>
-                <initialCredits>300</initialCredits>
-                <perBaseCredits>100</perBaseCredits>
-                <width>22</width>
-                <height>15</height>
-                <maxPlayers>2</maxPlayers>
-                <url>http://weewar.com/map/8</url>
-                <thumbnail>http://weewar.com/images/maps/boardThumb_8_ir3.png</thumbnail>
-                <preview>http://weewar.com/images/maps/preview_8_ir3.png</preview>
-                <revision>2</revision>
-                <creator>alex</creator>
-                <creatorProfile>http://weewar.com/user/alex</creatorProfile>
-                <terrains>
-                    <terrain x="0" y="7" type="Plains" />
-                    ...
-                    <terrain startUnit="Trooper" startUnitOwner="1" startFaction="1" x="3" y="8" type="Base" />
-                    <terrain startUnit="Trooper" startUnitOwner="1" startFaction="1" x="10" y="13" type="Base" />
-                    <terrain startUnit="Trooper" startUnitOwner="0" startFaction="0" x="12" y="2" type="Base" />
-                    <terrain startUnit="Trooper" startUnitOwner="0" startFaction="0" x="19" y="3" type="Base" />
-                    ...
-                </terrains>
-            </map>
-        """
-        complex_types = ['terrains']
-        values = dict(
-            (child.tag, child.pyval) 
-            for child in node.iterchildren()
-            if child.tag not in complex_types
-        )
-        values['id'] = int(node.get('id'))
-        _parse_terrain = lambda node: self._parse_attrs(node, x=int, y=int, 
-                type=str, startUnit=str, startUnitOwner=str, startFaction=int)
-        values['terrains'] = map(_parse_terrain, node.terrains.iterchildren())
-        return values
-
+    def build(self, game_id, x, y, type):
+        node = self._game_command(game_id, self.ELEMENT.build(
+                x=str(x), y=str(y), type=type))
+        return node
 
 class UserNotFound (Exception):
     """
@@ -843,6 +699,16 @@ class GameNotFound (Exception):
 class MapNotFound (Exception):
     """
     The specified weewar map could not be found.
+    """
+
+class NotYourGame (Exception):
+    """
+    Mind your own business!
+    """
+
+class NotYourTurn (Exception):
+    """
+    The user has to wait his/her turn to submit commands for a game.
     """
 
 #{ shortcuts/wrapper functions
@@ -937,15 +803,23 @@ def map_layout(id):
     
 #} shortcuts/wrapper functions
 
-#if __name__ == '__main__':
+if __name__ == '__main__':
+    import os.path
+    keys = open(os.path.expanduser('~/.weewar-apikey')).readlines()
+    user, key = keys.pop(0).strip().split(':')
 #    print open_games()
 #    print all_users()
-#    u = user('eviltwin')
+#    u = user(user)
 #    print 'User %(name)s (%(points)s points)' % u,
 #    print 'has %i games:' % len(u['games'])
 #    for g in u['games']:
 #        print ' - %(name)s (%(url)s)' % game(g['id'])
 #    print latest_maps()
-#    print headquarter('eviltwin', '...')
-#    print game_state('eviltwin', '...', 18682)
+#    print headquarter(user, key)
+#    print game_state(user, key, 186078)
 #    print map_layout(8)
+
+#    api = ELIZA(user, key)
+#    print api.finish_turn(186078)
+#    print api.build(186078, 1, 1, 'tank')
+
