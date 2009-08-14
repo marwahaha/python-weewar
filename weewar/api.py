@@ -71,6 +71,8 @@ __all__ = [
     'UserNotFound', 'GameNotFound', 'MapNotFound', 
 ]
 
+__version__ = '0.2-dev'
+
 class ReadOnlyAPI (object):
     
     """
@@ -118,6 +120,7 @@ class ReadOnlyAPI (object):
         headers = {
             'Content-Type' : 'application/xml',
             'Accept' : 'application/xml',
+            'User-Agent' : 'python-weewar/%s' % __version__, 
         }
 
         if authentication and self.username is not None:
@@ -126,6 +129,7 @@ class ReadOnlyAPI (object):
             headers['Authorization'] = 'Basic %s' % base64string
 
         #print 'opening %s...' % url
+        #print headers
         req = Request(url, data, headers)
 
         try:
