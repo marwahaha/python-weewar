@@ -71,7 +71,20 @@ __all__ = [
 class ReadOnlyAPI (object):
     
     """
-    The Read-only API provides the basic information on users and games.
+    Read-only API 
+    =============
+    
+    This API provides basic information on users and games. It supports basic
+    HTTP authentication for API calls to the Weewar REST service.
+
+    A basic call for accessing your headquerter looks like this::
+
+        >>> api = ReadOnlyAPI('eviltwin', '...')
+        >>> no_games_needing_attentiont, game_data = api.headquarter()
+        >>> print game_data
+        [{'map': 1, 'rated': True, 'name': 'Twins, Basil!', 'state': 'finished', 
+        'inNeedOfAttention': False, 'link': 'http://weewar.com/game/18682', ...
+
     """
 
     def __init__(self, username=None, apikey=None):
@@ -112,6 +125,34 @@ class ReadOnlyAPI (object):
             # otherwise raise again
             else: 
                 raise
+
+    def _parse_attrs(self, node, **attrs):
+        """
+        Parse node attributes and convert values into specified types.
+        A typical call of this method would look like this::
+        
+            >>> from lxml import objectify
+            >>> xml = '<terrain x="7" y="6" type="Base" finished="false" />'
+            >>> node = objectify.fromstring(xml)
+            >>> print _parse_attrs(node, x=int, y=int, type=str, finished=bool)
+            {'x' : 7, 'y' : 6, 'type' : 'Base', 'finished' : False}
+        
+        Only attributes that are both specified in C{attrs} and turn up in the
+        XML will end up in the resulting dict. Only exception here are boolean
+        values which will default to C{False} if not found in the XML. 
+        """
+        values = {}
+        for key, type_ in attrs.items():
+            val = node.get(key, None)
+            if val is not None or type_ is bool:
+                if type_ is bool:
+                    values[key] = str(val).lower().strip() == 'true'
+                else:
+                    try:
+                        values[key] = type_(val)
+                    except (ValueError, TypeError):
+                        values[key] = val
+        return values
 
     # Access specific games
     URL_GAME = 'http://weewar.com/api1/game/%s'
@@ -158,12 +199,8 @@ class ReadOnlyAPI (object):
         #   <user name="wulendam" id="21149" rating="1416" />
         #   ...
         # </users>
-        return [
-            dict(id=int(child.get('id')), 
-                 name=child.get('name'), 
-                 rating=int(child.get('rating'))) 
-            for child in root.findall('user')
-        ]
+        return map(lambda node: self._parse_attrs(node, id=int, 
+            name=str, rating=int), root.findall('user'))
 
     # Access a single user
     URL_USER = 'http://weewar.com/api1/user/%s'
@@ -392,7 +429,7 @@ class ReadOnlyAPI (object):
             if child.tag == 'unit'
         ]
         values['preferredPlayers'] = [
-            dict(id=child.get('id'), name=child.get('name')) 
+            self._parse_attrs(child, id=int, name=str)
             for child in node.preferredPlayers.iterchildren()
             if child.tag == 'player'
         ]
@@ -421,10 +458,12 @@ class ELIZA (ReadOnlyAPI):
     In order for ELIZA to accept request the username MUST start with "ai_"
     This is so bots are recognizable by the community as such.
 
-    You can not register a user name with a "_" in it at the moment, however
-    you can change the name in your settings after the initial registration to
-    comply with the Eliza requirements. The registration process will soon be
-    fixed accordingly.
+    According to the website (last updated 2009-04-06)
+    > You can not register a user name with a "_" in it at the moment, however
+    > you can change the name in your settings after the initial registration
+    > to comply with the Eliza requirements. The registration process will soon
+    > be fixed accordingly.
+
     """
 
     URL_GAME_STATE = 'http://weewar.com/api1/gamestate/%s'
@@ -442,19 +481,6 @@ class ELIZA (ReadOnlyAPI):
                 raise GameNotFound(id)
             else:
                 raise
-
-    def _parse_attrs(self, node, **attrs):
-        """
-        """
-        values = {}
-        for key, type_ in attrs.items():
-            val = node.get(key, None)
-            if val is not None or type_ is bool:
-                if type_ is bool:
-                    values[key] = str(val).lower().strip() == 'true'
-                else:
-                    values[key] = type_(val)
-        return values
 
     def _parse_game_state(self, node):
         """
