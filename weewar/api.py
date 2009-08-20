@@ -471,7 +471,30 @@ class AuthenticationError (Exception):
     The submitted user credentials were not correct.
     """
 
+#{ Basic unit types 
+TROOPER = 'Trooper'
+RAISER = 'Raider'
+HEAVY_TROOPER = 'Heavy Trooper'
 TANK = 'Tank'
+HEAVY_TANK = 'Heavy Tank'
+LIGHT_ARTILLERY = 'Light Artillery'
+HEAVY_ARTILLERY = 'Heavy Artillery'
+#} Basic unit types 
+
+#{ PRO-account unit types 
+ANTI_AIRCRAFT = 'Anti Aircraft' 
+ASSAULT_ARTILLERY = 'Assault Artillery' 
+BATTLESHIP = 'Battleship' 
+BOMBER = 'Bomber' 
+DESTROYER = 'Destroyer' 
+JET = 'Jet' 
+HELICOPTER = 'Helicopter' 
+HOVERCRAFT = 'Hovercraft' 
+SPEEDBOAT = 'Speedboat' 
+SUBMARINE = 'Submarine' 
+DFA = 'DFA' 
+BERSERKER = 'Berserker'
+#} PRO-account unit types 
 
 class ELIZA (ReadOnlyAPI):
 
@@ -487,7 +510,8 @@ class ELIZA (ReadOnlyAPI):
     > you can change the name in your settings after the initial registration
     > to comply with the Eliza requirements. The registration process will soon
     > be fixed accordingly.
-
+    
+    Documentation is available at http://weewar.wikispaces.com/api.
     """
 
     URL_GAME_STATE = 'http://weewar.com/api1/gamestate/%s'
@@ -688,7 +712,7 @@ class ELIZA (ReadOnlyAPI):
 
     def _simple_game_command(self, game_id, cmd):
         """
-        Send a simple commad to the API. A simple command usually consists of 
+        Send a simple command to the API. A simple command usually consists of 
         only one element.
         """
         node = getattr(self.ELEMENT, cmd)()
@@ -702,7 +726,7 @@ class ELIZA (ReadOnlyAPI):
         node = self._game_command(game_id, self.ELEMENT.chat(msg))
         return True
 
-    def build(self, game_id, x, y, type):
+    def build(self, game_id, (x, y), type):
         """
         Builds a unit are a specific location of the map.
         """
@@ -711,11 +735,65 @@ class ELIZA (ReadOnlyAPI):
                     x=str(x), y=str(y), type=str(type)))
             return node.tag == 'ok'
         except ELIZAError, e:
-            # <?xml version="1.0" ?><error>Cannot build any more units in this turn on this coordinate.</error>
-            # <?xml version="1.0" ?><error>Not enough credits.</error>
-            # <?xml version="1.0" ?><error>This Terrain cannot build the requested unit.</error>
-            # <?xml version="1.0" ?><error>Blocked by a unit.</error>
+            if e.node.text == 'Not enough credits.':
+                raise NotEnoughCredits(type)
+            if e.node.text == 'Not your terrain.':
+                raise NotYourTerrain(x, y)
+            elif e.node.text == ('Cannot build any more units in this turn on '
+                               'this coordinate.'):
+                raise CannotBuildMoreUnitsHere(x, y)
+            elif e.node.text == 'This Terrain cannot build the requested unit.':
+                raise WrongTerrain(x, y)
+            elif e.node.text == 'Blocked by a unit.':
+                raise FieldIsBlocked(x, y)
+            # otherwise
             return False
+        
+    def move_options(self, game_id, (x, y), type):
+        """
+        Requests unit movement options. This is pretty much like what you get 
+        when you select a unit in a regular game.
+        """
+        try:
+            options = self.ELEMENT.movementOptions(x=str(x), y=str(y), 
+                                                 type=str(type))
+            node = self._game_command(game_id, options)
+            coords = map(lambda node: self._parse_attrs(node, x=int, y=int), 
+                         node.findall('coordinate'))
+            return [(c.get('x'), c.get('y')) for c in coords]
+        except ELIZAError, e:
+            return []
+        
+    def attack_options(self, game_id, (x, y), type, moved=None):
+        """
+        Requests possible targets. The 'moved' attribute is optional and 
+        describes the number of turns a unit has already moved. This is helpful 
+        for Jets and Battleships.
+        """
+        try:
+            options = self.ELEMENT.attackOptions(x=str(x), y=str(y), 
+                                                 type=str(type))
+            if moved is not None:
+                options.set('moved', str(moved))
+            node = self._game_command(game_id, options)
+            return node.tag == 'ok'
+        except ELIZAError, e:
+            return False
+        
+    def _unit_command(self, game_id, (x, y), command, **kwargs):
+        """
+        Send a command to a unit at (x, y).
+        """
+        try:
+            unit = self.ELEMENT.unit(x=str(x), y=str(y))
+            unit.append(getattr(self.ELEMENT, command)(**kwargs))
+            return self._game_command(game_id, unit)
+        except ELIZAError, e:
+            if e.node.text == 'Not your Unit.':
+                raise NotYourUnit(x, y)
+            # otherwise simply re-raise
+            raise
+    
 
 class UserNotFound (Exception):
     """
@@ -749,6 +827,36 @@ class NotYourGame (Exception):
 class NotYourTurn (Exception):
     """
     The user has to wait his/her turn to submit commands for a game.
+    """
+
+class NotYourTerrain (Exception):
+    """
+    The user has to capture that base first.
+    """
+    
+class NotYourUnit (Exception):
+    """
+    The user has to keep his/her hands off foreign units.
+    """
+    
+class CannotBuildMoreUnitsHere (Exception):
+    """
+    Cannot build any more units in this turn on this coordinate.
+    """
+    
+class NotEnoughCredits (Exception):
+    """
+    Not enough credits.
+    """
+    
+class WrongTerrain (Exception):
+    """
+    This Terrain cannot build the requested unit.
+    """
+    
+class FieldIsBlocked (Exception):
+    """
+    Blocked by a unit.
     """
 
 #{ shortcuts/wrapper functions
@@ -1002,7 +1110,7 @@ def chat(username, apikey, game_id, msg):
     api = ELIZA(username, apikey)
     return api.chat(game_id, msg)
 
-def build(username, apikey, game_id, x, y, unit):
+def build_unit(username, apikey, game_id, (x, y), unit):
     """
     Sends a chat message to the game board.
     @param username: weewar username
@@ -1019,7 +1127,122 @@ def build(username, apikey, game_id, x, y, unit):
     @type unit: str
     """
     api = ELIZA(username, apikey)
-    return api.build(game_id, x, y, unit)
+    return api.build(game_id, (x, y), unit)
+
+def unit_move_options(username, apikey, game_id, unit, (x, y)):
+    """
+    Requests unit movement options. This is pretty much like what you get 
+    when you select a unit in a regular game.
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param game_id: Unique ID of weewar game.
+    @type game_id: int
+    @param unit: Unit type.
+    @type unit: str
+    @param x: X-position on map.
+    @type x: int
+    @param y: Y-position on map.
+    @type y: int
+    """
+    api = ELIZA(username, apikey)
+    return api.move_options(game_id, (x, y), unit)
+
+def unit_attack_options(username, apikey, game_id, unit, (x, y), moved=None):
+    """
+    Requests possible targets. The 'moved' attribute is optional and 
+    describes the number of turns a unit has already moved. This is helpful 
+    for Jets and Battleships.
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param game_id: Unique ID of weewar game.
+    @type game_id: int
+    @param unit: Unit type.
+    @type unit: str
+    @param x: X-position on map.
+    @type x: int
+    @param y: Y-position on map.
+    @type y: int
+    """
+    api = ELIZA(username, apikey)
+    return api.attack_options(game_id, (x, y), unit, moved)
+
+def move_unit(username, apikey, game_id, unit, from_, to):
+    """
+    Move a unit from C{from_} to C{to}.
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param game_id: Unique ID of weewar game.
+    @type game_id: int
+    @param unit: Unit type.
+    @type unit: str
+    @param from_: position on map.
+    @type from_: (int, int)
+    @param to: position on map.
+    @type to: (int, int)
+    """
+    api = ELIZA(username, apikey)
+    to = dict(zip('xy', map(str, to)))
+    return api._unit_command(game_id, from_, 'move', **to)
+    
+def attack_with(username, apikey, game_id, unit, from_, target):
+    """
+    Attack with unit at C{from_} to C{to}.
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param game_id: Unique ID of weewar game.
+    @type game_id: int
+    @param unit: Unit type.
+    @type unit: str
+    @param from_: position on map.
+    @type from_: (int, int)
+    @param target: position on map.
+    @type target: (int, int)
+    """
+    api = ELIZA(username, apikey)
+    to = dict(zip('xy', map(str, target)))
+    return api._unit_command(game_id, from_, 'attack', **to)
+    
+def capture_base(username, apikey, game_id, unit, at):
+    """
+    Capture a base with unit. You have to move there first! 
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param game_id: Unique ID of weewar game.
+    @type game_id: int
+    @param unit: Unit type.
+    @type unit: str
+    @param at: position on map.
+    @type at: (int, int)
+    """
+    api = ELIZA(username, apikey)
+    return api._unit_command(game_id, from_, 'capture')
+
+def repair_unit(username, apikey, game_id, unit, at):
+    """
+    Repair a unit. 
+    @param username: weewar username
+    @type username: str
+    @param apikey: Matching API key (from http://weewar.com/apiToken)
+    @type apikey: str
+    @param game_id: Unique ID of weewar game.
+    @type game_id: int
+    @param unit: Unit type.
+    @type unit: str
+    @param at: position on map.
+    @type at: (int, int)
+    """
+    api = ELIZA(username, apikey)
+    return api._unit_command(game_id, from_, 'repair')
 
 #} shortcuts/wrapper functions
 
@@ -1040,7 +1263,7 @@ if __name__ == '__main__':
 #    print headquarter(user, key)
 
     game_id = 186136
-#    print game_state(user, key, game_id)
+    print game_state(user, key, game_id)
 #    print map_layout(8)
 #    print finish_turn(user, key, game_id)
 #    print accept_invitation(user, key, game_id)
@@ -1050,7 +1273,9 @@ if __name__ == '__main__':
 #    print abandon_game(user, key, game_id)
 #    print remove_game(user, key, game_id)
 #    print chat(user, key, game_id, 'bla'*10)
-    print build(user, key, game_id, 4, 14, TANK)
-
-    api = ELIZA(user, key)
+#    print build(user, key, game_id, (4, 14), TANK)
+    print unit_move_options(user, key, game_id, TROOPER, (2, 11))
+    print unit_attack_options(user, key, game_id, TROOPER, (2, 11))
+    print move_unit(user, key, game_id, TROOPER, (2, 11), (3, 12))
+    print attack_with(user, key, game_id, TROOPER, (4, 13), (4, 11))
 
