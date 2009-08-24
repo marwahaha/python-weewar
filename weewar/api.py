@@ -134,10 +134,10 @@ class ReadOnlyAPI (object):
 
         try:
             handle = urlopen(req)
-            #return objectify.parse(handle).getroot()
-            xml = handle.read()
-            print xml
-            return objectify.fromstring(xml)
+            return objectify.parse(handle).getroot()
+            #xml = handle.read()
+            #print xml
+            #return objectify.fromstring(xml)
         except HTTPError, e:
             # HTTP response 401: Unauthorized
             if e.code == 401: 
@@ -689,7 +689,7 @@ class ELIZA (ReadOnlyAPI):
     def _game_command(self, game_id, node):
         game = self.ELEMENT.weewar(game=str(game_id))
         game.append(node)
-        print tostring(game, pretty_print=True)
+        #print tostring(game, pretty_print=True)
         node = self._call_api(self.URL_ELIZA_COMMANDS, True, tostring(game))
         if node.tag == 'error':
             if node.text == 'Game not found':
@@ -1246,11 +1246,20 @@ def repair_unit(username, apikey, game_id, unit, at):
 
 #} shortcuts/wrapper functions
 
-if __name__ == '__main__':
-
-    import os.path
-    keys = open(os.path.expanduser('~/.weewar-apikey')).readlines()
-    user, key = keys.pop(0).strip().split(':')
+#if __name__ == '__main__':
+#    
+#    # Put your Weewar username and API key in file ~/.weewar-apikey separated by
+#    # a colon (:) with one user-key-pair per line:
+#    # 
+#    #    someuser:XXXXXXXX
+#    #    someotheruser:XXXXXXXXXXXXXXX
+#    #    ...
+#    # 
+#    # If you have more than one entry (which is nice for testing) only the first 
+#    # is used.
+#    import os.path
+#    keys = open(os.path.expanduser('~/.weewar-apikey')).readlines()
+#    user, key = keys.pop(0).strip().split(':')
 
 #    print open_games()
 #    print all_users()
@@ -1261,9 +1270,9 @@ if __name__ == '__main__':
 #        print ' - %(name)s (%(url)s)' % game(g['id'])
 #    print latest_maps()
 #    print headquarter(user, key)
-
-    game_id = 186136
-    print game_state(user, key, game_id)
+#
+#    game_id = 186136
+#    print game_state(user, key, game_id)
 #    print map_layout(8)
 #    print finish_turn(user, key, game_id)
 #    print accept_invitation(user, key, game_id)
@@ -1274,8 +1283,8 @@ if __name__ == '__main__':
 #    print remove_game(user, key, game_id)
 #    print chat(user, key, game_id, 'bla'*10)
 #    print build(user, key, game_id, (4, 14), TANK)
-    print unit_move_options(user, key, game_id, TROOPER, (2, 11))
-    print unit_attack_options(user, key, game_id, TROOPER, (2, 11))
-    print move_unit(user, key, game_id, TROOPER, (2, 11), (3, 12))
-    print attack_with(user, key, game_id, TROOPER, (4, 13), (4, 11))
+#    print unit_move_options(user, key, game_id, TROOPER, (2, 11))
+#    print unit_attack_options(user, key, game_id, TROOPER, (2, 11))
+#    print move_unit(user, key, game_id, TROOPER, (2, 11), (3, 12))
+#    print attack_with(user, key, game_id, TROOPER, (4, 13), (4, 11))
 
