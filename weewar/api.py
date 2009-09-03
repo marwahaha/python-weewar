@@ -42,17 +42,54 @@ The following functions are supplied:
 
  - map_layout(id) returns complete map layout.
 
+Each game can also be controlled via these commands (which are part of the
+ELIZA API):
+
+ - finish_turn(username, apikey, id) finishes turn in game.
+
+ - accept_invitation(username, apikey, id) accepts invitation to a game.
+
+ - decline_invitation(username, apikey, id) declines invitation to a game.
+
+ - send_reminder(username, apikey, id) sends a reminder about the game.
+
+ - surrender_game(username, apikey, id) surrenders!
+
+ - abandon_game(username, apikey, id) abondons a game.
+
+ - remove_game(username, apikey, id) removes a game.
+
+ - chat(username, apikey, game_id, msg) sends a chat message to the game board.
+
+ - build_unit(username, apikey, game_id, (x, y), unit) sends a chat message to
+   the game board.
+
+ - unit_move_options(username, apikey, game_id, unit, (x, y)) requests unit
+   movement options. This is pretty much like what you get when you select a
+   unit in a regular game.
+
+ - unit_attack_options(username, apikey, game_id, unit, (x, y), moved=None)
+   requests possible targets. The 'moved' attribute is optional and describes
+   the number of turns a unit has already moved. This is helpful for Jets and
+   Battleships.
+
+ - move_unit(username, apikey, game_id, unit, from_, to):
+    Move a unit from C{from_} to C{to}.
+    
+ - attack_with(username, apikey, game_id, unit, from_, target) attacks with
+   unit at C{from_} to C{to}.
+    
+ - capture_base(username, apikey, game_id, unit, at) captures a base with unit.
+   You have to move there first! 
+
+ - repair_unit(username, apikey, game_id, unit, at) repairs a unit. 
+
 Authentication
 --------------
 
 Some of the provided functions require a username and a password. Use your
 Weewar account username and the API token accessible via
 http://weewar.com/apiToken.
-
-What's still missing?
----------------------
-
-At the moment support for commands still needs to be implemented.
 
 """
 
@@ -64,6 +101,8 @@ from lxml import etree
 from lxml import objectify
 from lxml.etree import tostring
 
+import version
+
 __all__ = [
     'game', 'open_games', 'all_users', 'user', 'latest_maps', 'headquarter',
     'game_state', 'map_layout', 
@@ -71,7 +110,7 @@ __all__ = [
     'UserNotFound', 'GameNotFound', 'MapNotFound', 
 ]
 
-__version__ = '0.2-dev'
+__version__ = version.VERSION
 
 class ReadOnlyAPI (object):
     
