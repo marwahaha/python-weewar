@@ -1,12 +1,12 @@
 from setuptools import setup
-from weewar import VERSION, api
+import weewar
 
 setup(
     name="python-weewar",
-    version=VERSION,
+    version=weewar.VERSION,
 
     description="Python wrapper for the Weewar XML API",
-    long_description=api.__doc__, 
+    long_description=weewar.__doc__, 
     
     author="Sebastian Rahlf",
     author_email="basti AT redtoad DOT de",
