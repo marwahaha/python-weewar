@@ -11,7 +11,10 @@ import version
 
 __all__ = [
     'game', 'open_games', 'all_users', 'user', 'latest_maps', 'headquarter',
-    'game_state', 'map_layout', 
+    'game_state', 'map_layout', 'finish_turn', 'accept_invitation', 
+    'decline_invitation', 'send_reminder', 'surrender_game', 'abandon_game',
+    'chat', 'build_unit', 'unit_move_options', 'unit_attack_options', 
+    'move_unit', 'attack_with', 'capture_base', 'repair_unit',
     'AuthenticationError', 'ServerError', 
     'UserNotFound', 'GameNotFound', 'MapNotFound', 
 ]
