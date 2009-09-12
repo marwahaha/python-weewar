@@ -1,12 +1,15 @@
 from setuptools import setup
 import weewar
 
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
 setup(
     name="python-weewar",
     version=weewar.VERSION,
-
+    
     description="Python wrapper for the Weewar XML API",
-    long_description=weewar.__doc__, 
+    long_description=read('README'),
     
     author="Sebastian Rahlf",
     author_email="basti AT redtoad DOT de",
