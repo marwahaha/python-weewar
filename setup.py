@@ -1,4 +1,6 @@
 from setuptools import setup
+import os
+
 import weewar
 
 def read(fname):
