@@ -3,6 +3,8 @@ from urllib2 import Request, urlopen, HTTPError
 #from urllib2 import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
 #from urllib2 import build_opener, install_opener
 import base64
+from datetime import datetime, timedelta
+
 from lxml import etree
 from lxml import objectify
 from lxml.etree import tostring
@@ -40,6 +42,8 @@ class ReadOnlyAPI (object):
 
     """
 
+    REQUESTS_PER_SECOND = 2 #: max requests per second
+
     def __init__(self, username=None, apikey=None):
         """
         Initialise API (with user credentials for authenticated calls).
@@ -60,6 +64,9 @@ class ReadOnlyAPI (object):
         #        ('Accept', 'application/xml')
         #    ]
         #    install_opener(opener)
+        
+        self.last_call = datetime(1970, 1, 1)
+        self.throttle = timedelta(seconds=1)/self.REQUESTS_PER_SECOND
 
     def _call_api(self, url, authentication=False, data=None):
         """
@@ -75,6 +82,12 @@ class ReadOnlyAPI (object):
             base64string = base64.encodestring(
                 '%s:%s' % (self.username, self.apikey))[:-1]
             headers['Authorization'] = 'Basic %s' % base64string
+
+        # Be nice and wait for some time 
+        # before submitting the next request
+        while (datetime.now() - self.last_call) < self.throttle: 
+            pass # Wait for it!
+        self.last_call = datetime.now()
 
         #print 'opening %s...' % url
         #print headers
@@ -1208,7 +1221,7 @@ def repair_unit(username, apikey, game_id, unit, at):
 #    import os.path
 #    keys = open(os.path.expanduser('~/.weewar-apikey')).readlines()
 #    user, key = keys.pop(0).strip().split(':')
-
+#
 #    print open_games()
 #    print all_users()
 #    u = user(user)
