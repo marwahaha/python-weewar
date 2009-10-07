@@ -16,6 +16,7 @@ setup(
     author="Sebastian Rahlf",
     author_email="basti AT redtoad DOT de",
     url="http://bitbucket.org/basti/python-weewar/downloads/",
+    license='lgpl',
     
     packages=['weewar'],
     install_requires=['lxml>=2.1.5'],
