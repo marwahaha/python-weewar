@@ -1,5 +1,10 @@
 .svn
+build
+dist
 python_weewar.egg-info
+
+.project
+.pydevproject
 
 syntax: glob
 *.pyc

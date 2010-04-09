@@ -228,7 +228,7 @@ class TestXMLParsing(unittest.TestCase):
 
     def test_latest_maps(self):
         """
-        XML response of test_latest_maps().
+        XML response of latest_maps().
         """
         xml = """
         <maps>
@@ -301,6 +301,7 @@ class TestXMLParsing(unittest.TestCase):
 
     def test_headquarter(self):
         """
+        XML response of headquarter().
         """
         xml = """
         <?xml version="1.0" encoding="UTF-8"?>

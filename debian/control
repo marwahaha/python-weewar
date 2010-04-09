@@ -1,0 +1,21 @@
+Source: python-weewar
+Section: python
+Priority: extra
+Maintainer: Sebastian Rahlf <basti@redtoad.de>
+Build-Depends: cdbs, debhelper (>= 7), python-support (>= 0.5.3)
+Standards-Version: 3.8.0
+Homepage: http://bitbucket.org/basti/python-weewar/
+
+Package: python-weewar
+Architecture: all
+Depends: python-lxml, ${python:Depends}, ${misc:Depends}
+Description: Python wrapper for the Weewar XML API
+ Weewar (http://weewar.com) is an "Award winning turn based multiplayer
+ strategy game". Apart from being highly addictive, it provides 2 APIs: one
+ read-only API for players and a bot API called ELIZA (further documentation on
+ both is available at http://weewar.wikispaces.com/api) . 
+ . 
+ This module aims enables you to conveniently call each of these API functions
+ from within your python script.
+
+

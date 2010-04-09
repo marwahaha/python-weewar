@@ -1,77 +1,27 @@
 
-"""
-Python wrapper for the Weewar XML API
-=====================================
-
-Weewar (http://weewar.com) is an "Award winning turn based multiplayer strategy
-game". Apart from being highly addictive, it provides 2 APIs: one read-only API
-for players and a bot API called ELIZA (further documentation on both is
-available at http://weewar.wikispaces.com/api) . 
-
-This module aims enables you to conveniently call each of these API functions
-from within your python script.
-
-Available API calls
--------------------
-
-The following functions are supplied:
-
- - game(id) returns the status of a game and gives information about the
-   participating players.
-    
- - open_games() returns all currently available open games as a list of IDs.
-    
- - all_users() returns a list of all users who have been online in the last 7
-   days, including their current ranking.
-    
- - user(username) Returns detailed information about a single user, including
-   everything that is visible on the profile page and the games the user is
-   participating in.
-
- - latest_maps() returns the latest published maps including urls for previews,
-   images, and other details.
-    
- - headquarter(username, apikey) returns all games that are listed in your
-   Headquarters. Includes information about the id, the url, the state, and the
-   name of the game.  An attribute is added if the game is in need of
-   attention, e.g: its the users turn or the game is not yet started or the
-   user is invited to this game (requires authentication).
-
- - game_state(username, apikey, id) offers more information about the state of
-   a game (requires authentication).
-
- - map_layout(id) returns complete map layout.
-
-Authentication
---------------
-
-Some of the provided functions require a username and a password. Use your
-Weewar account username and the API token accessible via
-http://weewar.com/apiToken.
-
-What's still missing?
----------------------
-
-At the moment support for commands still needs to be implemented.
-
-"""
-
 from urllib2 import Request, urlopen, HTTPError
 #from urllib2 import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
 #from urllib2 import build_opener, install_opener
 import base64
+from datetime import datetime, timedelta
+
 from lxml import etree
 from lxml import objectify
 from lxml.etree import tostring
 
+import version
+
 __all__ = [
     'game', 'open_games', 'all_users', 'user', 'latest_maps', 'headquarter',
-    'game_state', 'map_layout', 
+    'game_state', 'map_layout', 'finish_turn', 'accept_invitation', 
+    'decline_invitation', 'send_reminder', 'surrender_game', 'abandon_game',
+    'chat', 'build_unit', 'unit_move_options', 'unit_attack_options', 
+    'move_unit', 'attack_with', 'capture_base', 'repair_unit',
     'AuthenticationError', 'ServerError', 
     'UserNotFound', 'GameNotFound', 'MapNotFound', 
 ]
 
-__version__ = '0.2-dev'
+__version__ = version.VERSION
 
 class ReadOnlyAPI (object):
     
@@ -91,6 +41,8 @@ class ReadOnlyAPI (object):
         'inNeedOfAttention': False, 'link': 'http://weewar.com/game/18682', ...
 
     """
+
+    REQUESTS_PER_SECOND = 2 #: max requests per second
 
     def __init__(self, username=None, apikey=None):
         """
@@ -112,6 +64,9 @@ class ReadOnlyAPI (object):
         #        ('Accept', 'application/xml')
         #    ]
         #    install_opener(opener)
+        
+        self.last_call = datetime(1970, 1, 1)
+        self.throttle = timedelta(seconds=1)/self.REQUESTS_PER_SECOND
 
     def _call_api(self, url, authentication=False, data=None):
         """
@@ -127,6 +82,12 @@ class ReadOnlyAPI (object):
             base64string = base64.encodestring(
                 '%s:%s' % (self.username, self.apikey))[:-1]
             headers['Authorization'] = 'Basic %s' % base64string
+
+        # Be nice and wait for some time 
+        # before submitting the next request
+        while (datetime.now() - self.last_call) < self.throttle: 
+            pass # Wait for it!
+        self.last_call = datetime.now()
 
         #print 'opening %s...' % url
         #print headers
@@ -1260,7 +1221,7 @@ def repair_unit(username, apikey, game_id, unit, at):
 #    import os.path
 #    keys = open(os.path.expanduser('~/.weewar-apikey')).readlines()
 #    user, key = keys.pop(0).strip().split(':')
-
+#
 #    print open_games()
 #    print all_users()
 #    u = user(user)
