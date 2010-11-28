@@ -1,14 +1,16 @@
 from setuptools import setup
-import os
+import os, sys
 
-import weewar
+_here = os.path.abspath(os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(_here, 'weewar'))
+from version import VERSION
 
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    return open(os.path.join(_here, fname)).read()
 
 setup(
     name="python-weewar",
-    version=weewar.VERSION,
+    version=VERSION,
     
     description="Python wrapper for the Weewar XML API",
     long_description=read('README'),
