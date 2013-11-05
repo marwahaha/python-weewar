@@ -1,0 +1,43 @@
+{
+    "id": 21885,
+    "name": "Another short one",
+    "round": 36,
+    "state": "finished",
+    "pendingInvites": false,
+    "pace": 86400,
+    "type": "Pro",
+    "url": "http://weewar.com/game/21885",
+    "rated": true,
+    "since": "12 hours",
+    "players": [
+        {
+            "index": 0,
+            "current": true,
+            "result": "victory",
+            "username": "eviltwin"
+        },
+        {
+            "index": 1,
+            "result": "defeat",
+            "username": "challenge"
+        }
+    ],
+    "disabledUnitTypes": [
+        "Anti Aircraft",
+        "Assault Artillery",
+        "Battleship",
+        "Bomber",
+        "Destroyer",
+        "Jet",
+        "Helicopter",
+        "Hovercraft",
+        "Speedboat",
+        "Submarine",
+        "DFA",
+        "Berserker"],
+    "map": 8,
+    "mapUrl": "http://weewar.com/map/8",
+    "creditsPerBase": 100,
+    "initialCredits": 300,
+    "playingSince": "Thu Jul 30 19:26:31 UTC 2009"
+}

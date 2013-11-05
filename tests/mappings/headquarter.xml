@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<games>
+    <game>
+        <id>18682</id>
+        <name>Twins, Basil!</name>
+        <state>running</state>
+        <since>3 minutes</since>
+        <rated>true</rated>
+        <link>http://weewar.com/game/18682</link>
+        <url>http://weewar.com/game/18682</url>
+        <map>1</map>
+        <factionState>playing</factionState>
+    </game>
+    <game inNeedOfAttention="true">
+        <id>21885</id>
+        <name>Another short one</name>
+        <state>finished</state>
+        <result>victory</result>
+        <since>17 hours 36 minutes</since>
+        <rated>true</rated>
+        <link>http://weewar.com/game/21885</link>
+        <url>http://weewar.com/game/21885</url>
+        <map>8</map>
+        <factionState>finished</factionState>
+    </game>
+    <inNeedOfAttention>1</inNeedOfAttention>
+</games>

@@ -1,0 +1,1414 @@
+{
+    "terrains": [
+        {
+            "y": 7,
+            "x": 0,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 0,
+            "type": "Woods"
+        },
+        {
+            "y": 9,
+            "x": 0,
+            "type": "Woods"
+        },
+        {
+            "y": 3,
+            "x": 1,
+            "type": "Plains"
+        },
+        {
+            "y": 5,
+            "x": 1,
+            "type": "Mountains"
+        },
+        {
+            "y": 6,
+            "x": 1,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 1,
+            "type": "Woods"
+        },
+        {
+            "y": 8,
+            "x": 1,
+            "type": "Mountains"
+        },
+        {
+            "y": 9,
+            "x": 1,
+            "type": "Woods"
+        },
+        {
+            "y": 10,
+            "x": 1,
+            "type": "Woods"
+        },
+        {
+            "y": 3,
+            "x": 2,
+            "type": "Water"
+        },
+        {
+            "y": 4,
+            "x": 2,
+            "type": "Plains"
+        },
+        {
+            "y": 5,
+            "x": 2,
+            "type": "Plains"
+        },
+        {
+            "y": 6,
+            "x": 2,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 2,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 2,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 2,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 2,
+            "type": "Woods"
+        },
+        {
+            "y": 11,
+            "x": 2,
+            "type": "Woods"
+        },
+        {
+            "y": 2,
+            "x": 3,
+            "type": "Water"
+        },
+        {
+            "y": 3,
+            "x": 3,
+            "type": "Water"
+        },
+        {
+            "y": 4,
+            "x": 3,
+            "type": "Plains"
+        },
+        {
+            "y": 5,
+            "x": 3,
+            "type": "Plains"
+        },
+        {
+            "y": 6,
+            "x": 3,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 3,
+            "type": "Plains"
+        },
+        {
+            "startFaction": 1,
+            "startUnitOwner": "1",
+            "y": 8,
+            "x": 3,
+            "type": "Base",
+            "startUnit": "Trooper"
+        },
+        {
+            "y": 9,
+            "x": 3,
+            "type": "Mountains"
+        },
+        {
+            "y": 10,
+            "x": 3,
+            "type": "Woods"
+        },
+        {
+            "y": 11,
+            "x": 3,
+            "type": "Mountains"
+        },
+        {
+            "y": 12,
+            "x": 3,
+            "type": "Woods"
+        },
+        {
+            "y": 13,
+            "x": 3,
+            "type": "Woods"
+        },
+        {
+            "y": 2,
+            "x": 4,
+            "type": "Water"
+        },
+        {
+            "y": 3,
+            "x": 4,
+            "type": "Water"
+        },
+        {
+            "y": 4,
+            "x": 4,
+            "type": "Desert"
+        },
+        {
+            "y": 5,
+            "x": 4,
+            "type": "Plains"
+        },
+        {
+            "y": 6,
+            "x": 4,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 4,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 4,
+            "type": "Mountains"
+        },
+        {
+            "y": 9,
+            "x": 4,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 4,
+            "type": "Plains"
+        },
+        {
+            "y": 11,
+            "x": 4,
+            "type": "Plains"
+        },
+        {
+            "y": 12,
+            "x": 4,
+            "type": "Mountains"
+        },
+        {
+            "y": 13,
+            "x": 4,
+            "type": "Woods"
+        },
+        {
+            "y": 2,
+            "x": 5,
+            "type": "Water"
+        },
+        {
+            "y": 3,
+            "x": 5,
+            "type": "Water"
+        },
+        {
+            "y": 4,
+            "x": 5,
+            "type": "Desert"
+        },
+        {
+            "y": 5,
+            "x": 5,
+            "type": "Desert"
+        },
+        {
+            "y": 6,
+            "x": 5,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 5,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 5,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 5,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 5,
+            "type": "Plains"
+        },
+        {
+            "y": 11,
+            "x": 5,
+            "type": "Plains"
+        },
+        {
+            "y": 12,
+            "x": 5,
+            "type": "Plains"
+        },
+        {
+            "y": 13,
+            "x": 5,
+            "type": "Plains"
+        },
+        {
+            "y": 14,
+            "x": 5,
+            "type": "Plains"
+        },
+        {
+            "y": 3,
+            "x": 6,
+            "type": "Water"
+        },
+        {
+            "y": 4,
+            "x": 6,
+            "type": "Water"
+        },
+        {
+            "y": 5,
+            "x": 6,
+            "type": "Desert"
+        },
+        {
+            "y": 6,
+            "x": 6,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 6,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 6,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 6,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 6,
+            "type": "Plains"
+        },
+        {
+            "y": 11,
+            "x": 6,
+            "type": "Plains"
+        },
+        {
+            "y": 12,
+            "x": 6,
+            "type": "Plains"
+        },
+        {
+            "y": 13,
+            "x": 6,
+            "type": "Plains"
+        },
+        {
+            "y": 14,
+            "x": 6,
+            "type": "Base"
+        },
+        {
+            "y": 2,
+            "x": 7,
+            "type": "Water"
+        },
+        {
+            "y": 3,
+            "x": 7,
+            "type": "Water"
+        },
+        {
+            "y": 4,
+            "x": 7,
+            "type": "Desert"
+        },
+        {
+            "y": 5,
+            "x": 7,
+            "type": "Plains"
+        },
+        {
+            "y": 6,
+            "x": 7,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 7,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 7,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 7,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 7,
+            "type": "Plains"
+        },
+        {
+            "y": 11,
+            "x": 7,
+            "type": "Plains"
+        },
+        {
+            "y": 12,
+            "x": 7,
+            "type": "Plains"
+        },
+        {
+            "y": 13,
+            "x": 7,
+            "type": "Plains"
+        },
+        {
+            "y": 14,
+            "x": 7,
+            "type": "Mountains"
+        },
+        {
+            "y": 1,
+            "x": 8,
+            "type": "Water"
+        },
+        {
+            "y": 2,
+            "x": 8,
+            "type": "Water"
+        },
+        {
+            "y": 3,
+            "x": 8,
+            "type": "Desert"
+        },
+        {
+            "y": 4,
+            "x": 8,
+            "type": "Desert"
+        },
+        {
+            "y": 5,
+            "x": 8,
+            "type": "Plains"
+        },
+        {
+            "y": 6,
+            "x": 8,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 8,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 8,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 8,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 8,
+            "type": "Plains"
+        },
+        {
+            "y": 11,
+            "x": 8,
+            "type": "Plains"
+        },
+        {
+            "y": 12,
+            "x": 8,
+            "type": "Plains"
+        },
+        {
+            "y": 13,
+            "x": 8,
+            "type": "Plains"
+        },
+        {
+            "y": 14,
+            "x": 8,
+            "type": "Plains"
+        },
+        {
+            "y": 0,
+            "x": 9,
+            "type": "Water"
+        },
+        {
+            "y": 1,
+            "x": 9,
+            "type": "Water"
+        },
+        {
+            "y": 2,
+            "x": 9,
+            "type": "Water"
+        },
+        {
+            "y": 3,
+            "x": 9,
+            "type": "Desert"
+        },
+        {
+            "y": 4,
+            "x": 9,
+            "type": "Water"
+        },
+        {
+            "y": 5,
+            "x": 9,
+            "type": "Water"
+        },
+        {
+            "y": 6,
+            "x": 9,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 9,
+            "type": "Woods"
+        },
+        {
+            "y": 8,
+            "x": 9,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 9,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 9,
+            "type": "Plains"
+        },
+        {
+            "y": 11,
+            "x": 9,
+            "type": "Plains"
+        },
+        {
+            "y": 12,
+            "x": 9,
+            "type": "Plains"
+        },
+        {
+            "y": 13,
+            "x": 9,
+            "type": "Plains"
+        },
+        {
+            "y": 14,
+            "x": 9,
+            "type": "Mountains"
+        },
+        {
+            "y": 0,
+            "x": 10,
+            "type": "Water"
+        },
+        {
+            "y": 1,
+            "x": 10,
+            "type": "Desert"
+        },
+        {
+            "y": 2,
+            "x": 10,
+            "type": "Desert"
+        },
+        {
+            "y": 3,
+            "x": 10,
+            "type": "Plains"
+        },
+        {
+            "y": 4,
+            "x": 10,
+            "type": "Desert"
+        },
+        {
+            "y": 5,
+            "x": 10,
+            "type": "Water"
+        },
+        {
+            "y": 6,
+            "x": 10,
+            "type": "Desert"
+        },
+        {
+            "y": 7,
+            "x": 10,
+            "type": "Desert"
+        },
+        {
+            "y": 8,
+            "x": 10,
+            "type": "Woods"
+        },
+        {
+            "y": 9,
+            "x": 10,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 10,
+            "type": "Plains"
+        },
+        {
+            "y": 11,
+            "x": 10,
+            "type": "Plains"
+        },
+        {
+            "y": 12,
+            "x": 10,
+            "type": "Plains"
+        },
+        {
+            "startFaction": 1,
+            "startUnitOwner": "1",
+            "y": 13,
+            "x": 10,
+            "type": "Base",
+            "startUnit": "Trooper"
+        },
+        {
+            "y": 14,
+            "x": 10,
+            "type": "Desert"
+        },
+        {
+            "y": 0,
+            "x": 11,
+            "type": "Desert"
+        },
+        {
+            "y": 1,
+            "x": 11,
+            "type": "Plains"
+        },
+        {
+            "y": 2,
+            "x": 11,
+            "type": "Plains"
+        },
+        {
+            "y": 3,
+            "x": 11,
+            "type": "Mountains"
+        },
+        {
+            "y": 4,
+            "x": 11,
+            "type": "Plains"
+        },
+        {
+            "y": 5,
+            "x": 11,
+            "type": "Mountains"
+        },
+        {
+            "y": 6,
+            "x": 11,
+            "type": "Water"
+        },
+        {
+            "y": 7,
+            "x": 11,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 11,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 11,
+            "type": "Desert"
+        },
+        {
+            "y": 10,
+            "x": 11,
+            "type": "Mountains"
+        },
+        {
+            "y": 11,
+            "x": 11,
+            "type": "Desert"
+        },
+        {
+            "y": 12,
+            "x": 11,
+            "type": "Mountains"
+        },
+        {
+            "y": 13,
+            "x": 11,
+            "type": "Desert"
+        },
+        {
+            "y": 14,
+            "x": 11,
+            "type": "Desert"
+        },
+        {
+            "y": 0,
+            "x": 12,
+            "type": "Plains"
+        },
+        {
+            "y": 1,
+            "x": 12,
+            "type": "Plains"
+        },
+        {
+            "startFaction": 0,
+            "startUnitOwner": "0",
+            "y": 2,
+            "x": 12,
+            "type": "Base",
+            "startUnit": "Trooper"
+        },
+        {
+            "y": 3,
+            "x": 12,
+            "type": "Plains"
+        },
+        {
+            "y": 4,
+            "x": 12,
+            "type": "Plains"
+        },
+        {
+            "y": 5,
+            "x": 12,
+            "type": "Plains"
+        },
+        {
+            "y": 6,
+            "x": 12,
+            "type": "Mountains"
+        },
+        {
+            "y": 7,
+            "x": 12,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 12,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 12,
+            "type": "Water"
+        },
+        {
+            "y": 10,
+            "x": 12,
+            "type": "Water"
+        },
+        {
+            "y": 11,
+            "x": 12,
+            "type": "Water"
+        },
+        {
+            "y": 12,
+            "x": 12,
+            "type": "Desert"
+        },
+        {
+            "y": 13,
+            "x": 12,
+            "type": "Water"
+        },
+        {
+            "y": 14,
+            "x": 12,
+            "type": "Water"
+        },
+        {
+            "y": 0,
+            "x": 13,
+            "type": "Mountains"
+        },
+        {
+            "y": 1,
+            "x": 13,
+            "type": "Plains"
+        },
+        {
+            "y": 2,
+            "x": 13,
+            "type": "Mountains"
+        },
+        {
+            "y": 3,
+            "x": 13,
+            "type": "Plains"
+        },
+        {
+            "y": 4,
+            "x": 13,
+            "type": "Plains"
+        },
+        {
+            "y": 5,
+            "x": 13,
+            "type": "Plains"
+        },
+        {
+            "y": 6,
+            "x": 13,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 13,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 13,
+            "type": "Woods"
+        },
+        {
+            "y": 9,
+            "x": 13,
+            "type": "Woods"
+        },
+        {
+            "y": 10,
+            "x": 13,
+            "type": "Desert"
+        },
+        {
+            "y": 11,
+            "x": 13,
+            "type": "Water"
+        },
+        {
+            "y": 12,
+            "x": 13,
+            "type": "Desert"
+        },
+        {
+            "y": 13,
+            "x": 13,
+            "type": "Water"
+        },
+        {
+            "y": 14,
+            "x": 13,
+            "type": "Water"
+        },
+        {
+            "y": 0,
+            "x": 14,
+            "type": "Mountains"
+        },
+        {
+            "y": 1,
+            "x": 14,
+            "type": "Plains"
+        },
+        {
+            "y": 2,
+            "x": 14,
+            "type": "Plains"
+        },
+        {
+            "y": 3,
+            "x": 14,
+            "type": "Plains"
+        },
+        {
+            "y": 4,
+            "x": 14,
+            "type": "Plains"
+        },
+        {
+            "y": 5,
+            "x": 14,
+            "type": "Plains"
+        },
+        {
+            "y": 6,
+            "x": 14,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 14,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 14,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 14,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 14,
+            "type": "Plains"
+        },
+        {
+            "y": 11,
+            "x": 14,
+            "type": "Desert"
+        },
+        {
+            "y": 12,
+            "x": 14,
+            "type": "Desert"
+        },
+        {
+            "y": 13,
+            "x": 14,
+            "type": "Water"
+        },
+        {
+            "y": 14,
+            "x": 14,
+            "type": "Water"
+        },
+        {
+            "y": 1,
+            "x": 15,
+            "type": "Plains"
+        },
+        {
+            "y": 2,
+            "x": 15,
+            "type": "Plains"
+        },
+        {
+            "y": 3,
+            "x": 15,
+            "type": "Plains"
+        },
+        {
+            "y": 4,
+            "x": 15,
+            "type": "Plains"
+        },
+        {
+            "y": 5,
+            "x": 15,
+            "type": "Plains"
+        },
+        {
+            "y": 6,
+            "x": 15,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 15,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 15,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 15,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 15,
+            "type": "Plains"
+        },
+        {
+            "y": 11,
+            "x": 15,
+            "type": "Plains"
+        },
+        {
+            "y": 12,
+            "x": 15,
+            "type": "Desert"
+        },
+        {
+            "y": 13,
+            "x": 15,
+            "type": "Water"
+        },
+        {
+            "y": 14,
+            "x": 15,
+            "type": "Water"
+        },
+        {
+            "y": 0,
+            "x": 16,
+            "type": "Base"
+        },
+        {
+            "y": 1,
+            "x": 16,
+            "type": "Plains"
+        },
+        {
+            "y": 2,
+            "x": 16,
+            "type": "Plains"
+        },
+        {
+            "y": 3,
+            "x": 16,
+            "type": "Plains"
+        },
+        {
+            "y": 4,
+            "x": 16,
+            "type": "Plains"
+        },
+        {
+            "y": 5,
+            "x": 16,
+            "type": "Plains"
+        },
+        {
+            "y": 6,
+            "x": 16,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 16,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 16,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 16,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 16,
+            "type": "Plains"
+        },
+        {
+            "y": 11,
+            "x": 16,
+            "type": "Desert"
+        },
+        {
+            "y": 12,
+            "x": 16,
+            "type": "Desert"
+        },
+        {
+            "y": 13,
+            "x": 16,
+            "type": "Water"
+        },
+        {
+            "y": 14,
+            "x": 16,
+            "type": "Water"
+        },
+        {
+            "y": 0,
+            "x": 17,
+            "type": "Mountains"
+        },
+        {
+            "y": 1,
+            "x": 17,
+            "type": "Plains"
+        },
+        {
+            "y": 2,
+            "x": 17,
+            "type": "Plains"
+        },
+        {
+            "y": 3,
+            "x": 17,
+            "type": "Plains"
+        },
+        {
+            "y": 4,
+            "x": 17,
+            "type": "Plains"
+        },
+        {
+            "y": 5,
+            "x": 17,
+            "type": "Plains"
+        },
+        {
+            "y": 6,
+            "x": 17,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 17,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 17,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 17,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 17,
+            "type": "Desert"
+        },
+        {
+            "y": 11,
+            "x": 17,
+            "type": "Water"
+        },
+        {
+            "y": 12,
+            "x": 17,
+            "type": "Water"
+        },
+        {
+            "y": 13,
+            "x": 17,
+            "type": "Water"
+        },
+        {
+            "y": 14,
+            "x": 17,
+            "type": "Water"
+        },
+        {
+            "y": 1,
+            "x": 18,
+            "type": "Plains"
+        },
+        {
+            "y": 2,
+            "x": 18,
+            "type": "Plains"
+        },
+        {
+            "y": 3,
+            "x": 18,
+            "type": "Mountains"
+        },
+        {
+            "y": 4,
+            "x": 18,
+            "type": "Plains"
+        },
+        {
+            "y": 5,
+            "x": 18,
+            "type": "Plains"
+        },
+        {
+            "y": 6,
+            "x": 18,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 18,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 18,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 18,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 18,
+            "type": "Plains"
+        },
+        {
+            "y": 11,
+            "x": 18,
+            "type": "Water"
+        },
+        {
+            "y": 12,
+            "x": 18,
+            "type": "Water"
+        },
+        {
+            "y": 13,
+            "x": 18,
+            "type": "Water"
+        },
+        {
+            "y": 0,
+            "x": 19,
+            "type": "Woods"
+        },
+        {
+            "y": 1,
+            "x": 19,
+            "type": "Woods"
+        },
+        {
+            "y": 2,
+            "x": 19,
+            "type": "Mountains"
+        },
+        {
+            "startFaction": 0,
+            "startUnitOwner": "0",
+            "y": 3,
+            "x": 19,
+            "type": "Base",
+            "startUnit": "Trooper"
+        },
+        {
+            "y": 4,
+            "x": 19,
+            "type": "Plains"
+        },
+        {
+            "y": 5,
+            "x": 19,
+            "type": "Mountains"
+        },
+        {
+            "y": 6,
+            "x": 19,
+            "type": "Mountains"
+        },
+        {
+            "y": 7,
+            "x": 19,
+            "type": "Plains"
+        },
+        {
+            "y": 8,
+            "x": 19,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 19,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 19,
+            "type": "Plains"
+        },
+        {
+            "y": 11,
+            "x": 19,
+            "type": "Water"
+        },
+        {
+            "y": 12,
+            "x": 19,
+            "type": "Water"
+        },
+        {
+            "y": 0,
+            "x": 20,
+            "type": "Woods"
+        },
+        {
+            "y": 1,
+            "x": 20,
+            "type": "Woods"
+        },
+        {
+            "y": 2,
+            "x": 20,
+            "type": "Woods"
+        },
+        {
+            "y": 3,
+            "x": 20,
+            "type": "Mountains"
+        },
+        {
+            "y": 4,
+            "x": 20,
+            "type": "Plains"
+        },
+        {
+            "y": 5,
+            "x": 20,
+            "type": "Woods"
+        },
+        {
+            "y": 6,
+            "x": 20,
+            "type": "Plains"
+        },
+        {
+            "y": 7,
+            "x": 20,
+            "type": "Mountains"
+        },
+        {
+            "y": 8,
+            "x": 20,
+            "type": "Plains"
+        },
+        {
+            "y": 9,
+            "x": 20,
+            "type": "Mountains"
+        },
+        {
+            "y": 10,
+            "x": 20,
+            "type": "Plains"
+        },
+        {
+            "y": 11,
+            "x": 20,
+            "type": "Water"
+        },
+        {
+            "y": 12,
+            "x": 20,
+            "type": "Water"
+        },
+        {
+            "y": 2,
+            "x": 21,
+            "type": "Woods"
+        },
+        {
+            "y": 3,
+            "x": 21,
+            "type": "Woods"
+        },
+        {
+            "y": 4,
+            "x": 21,
+            "type": "Woods"
+        },
+        {
+            "y": 6,
+            "x": 21,
+            "type": "Woods"
+        },
+        {
+            "y": 7,
+            "x": 21,
+            "type": "Woods"
+        },
+        {
+            "y": 8,
+            "x": 21,
+            "type": "Plains"
+        },
+        {
+            "y": 10,
+            "x": 21,
+            "type": "Mountains"
+        },
+        {
+            "y": 11,
+            "x": 21,
+            "type": "Plains"
+        },
+        {
+            "y": 12,
+            "x": 21,
+            "type": "Water"
+        }
+    ],
+    "name": "One on one",
+    "creator": "alex",
+    "url": "http://weewar.com/map/8",
+    "creatorProfile": "http://weewar.com/user/alex",
+    "maxPlayers": 2,
+    "height": 15,
+    "width": 22,
+    "id": 8,
+    "perBaseCredits": 100,
+    "preview": "http://weewar.com/images/maps/preview_8_ir3.png",
+    "initialCredits": 300,
+    "thumbnail": "http://weewar.com/images/maps/boardThumb_8_ir3.png",
+    "revision": 2
+}

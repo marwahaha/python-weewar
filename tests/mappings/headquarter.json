@@ -1,0 +1,30 @@
+{
+    "needAttention": 1,
+    "games": [
+        {
+            "id": 18682,
+            "inNeedOfAttention": false,
+            "name": "Twins, Basil!",
+            "state": "running",
+            "since": "3 minutes",
+            "rated": true,
+            "link": "http://weewar.com/game/18682",
+            "url": "http://weewar.com/game/18682",
+            "map": 1,
+            "factionState": "playing"
+        },
+        {
+            "id": 21885,
+            "inNeedOfAttention": true,
+            "name": "Another short one",
+            "state": "finished",
+            "result": "victory",
+            "since": "17 hours 36 minutes",
+            "rated": true,
+            "link": "http://weewar.com/game/21885",
+            "url": "http://weewar.com/game/21885",
+            "map": 8,
+            "factionState": "finished"
+        }
+    ]
+}

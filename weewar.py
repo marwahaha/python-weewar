@@ -28,6 +28,7 @@ class ReadOnlyAPI (object):
     """
 
     REQUESTS_PER_SECOND = 2.0   #: max requests per second
+    HOST = 'http://weewar.com'
 
     def __init__(self, username=None, key=None):
         """
@@ -54,9 +55,10 @@ class ReadOnlyAPI (object):
         }
         if data:
             req = requests.post(
-                url, data, auth=(self.username, self.key), headers=headers)
+                self.HOST + url, data,
+                auth=(self.username, self.key), headers=headers)
         else:
-            req = requests.get(url, data=data, headers=headers)
+            req = requests.get(self.HOST + url, headers=headers)
 
         # Be nice and wait for some time
         # before submitting the next request
@@ -72,7 +74,9 @@ class ReadOnlyAPI (object):
         elif req.status_code == 500:
             raise ServerError
 
-        return objectify.parsefromstring(req.text).getroot()
+        content = req.content
+        parsed = objectify.fromstring(content)
+        return parsed
 
     @staticmethod
     def _parse_attrs(node, **attrs):
@@ -105,7 +109,7 @@ class ReadOnlyAPI (object):
         return values
 
     # Access specific games
-    URL_GAME = 'http://weewar.com/api1/game/%s'
+    URL_GAME = '/api1/game/%s'
 
     def game(self, id_):
         """
@@ -118,7 +122,7 @@ class ReadOnlyAPI (object):
         except NotFound:
             raise GameNotFound(id_)
 
-    URL_OPEN_GAMES = 'http://weewar.com/api1/games/open'
+    URL_OPEN_GAMES = '/api1/games/open'
 
     def open_games(self):
         """
@@ -127,7 +131,7 @@ class ReadOnlyAPI (object):
         root = self._call_api(self.URL_OPEN_GAMES)
         return [int(child.get('id')) for child in root.findall('game')]
 
-    URL_ALL_USERS = 'http://weewar.com/api1/users/all'
+    URL_ALL_USERS = '/api1/users/all'
 
     def all_users(self):
         """
@@ -138,7 +142,7 @@ class ReadOnlyAPI (object):
         return map(lambda node: self._parse_attrs(node, id=int,
             name=str, rating=int), root.findall('user'))
 
-    URL_USER = 'http://weewar.com/api1/user/%s'
+    URL_USER = '/api1/user/%s'
 
     def user(self, username):
         """
@@ -152,7 +156,7 @@ class ReadOnlyAPI (object):
         except NotFound:
             raise UserNotFound(username)
 
-    URL_LATEST_MAPS = 'http://weewar.com/api1/maps'
+    URL_LATEST_MAPS = '/api1/maps'
 
     def latest_maps(self):
         """
@@ -162,7 +166,7 @@ class ReadOnlyAPI (object):
         root = self._call_api(self.URL_LATEST_MAPS)
         return map(self._parse_map, root.findall('map'))
 
-    URL_HEADQUARTER = 'http://weewar.com/api1/headquarters'
+    URL_HEADQUARTER = '/api1/headquarters'
 
     def headquarter(self):
         """
@@ -172,7 +176,7 @@ class ReadOnlyAPI (object):
         users turn or the game is not yet started or the user is invited to
         this game.
         """
-        root = self._call_api(self.URL_HEADQUARTER, True)
+        root = self._call_api(self.URL_HEADQUARTER)
         need_attention = root.inNeedOfAttention
         def _parse(node):
             game = dict((child.tag, child.pyval) 
@@ -180,7 +184,7 @@ class ReadOnlyAPI (object):
             game['inNeedOfAttention'] = node.get('inNeedOfAttention') == 'true'
             return game
         games = map(_parse, root.findall('game'))
-        return need_attention, games
+        return {'needAttention': need_attention, 'games': games}
 
     def _parse_game(self, node):
         """
@@ -415,7 +419,7 @@ class ELIZA (ReadOnlyAPI):
     Documentation is available at http://weewar.wikispaces.com/api.
     """
 
-    URL_GAME_STATE = 'http://weewar.com/api1/gamestate/%s'
+    URL_GAME_STATE = '/api1/gamestate/%s'
 
     def game_state(self, id_):
         """
@@ -524,7 +528,7 @@ class ELIZA (ReadOnlyAPI):
 
         return values 
 
-    URL_MAP_LAYOUT = 'http://weewar.com/api1/map/%s'
+    URL_MAP_LAYOUT = '/api1/map/%s'
 
     def map_layout(self, id_):
         """
@@ -578,7 +582,7 @@ class ELIZA (ReadOnlyAPI):
         values['terrains'] = map(_parse_terrain, node.terrains.iterchildren())
         return values
 
-    URL_ELIZA_COMMANDS = 'http://weewar.com/api1/eliza'
+    URL_ELIZA_COMMANDS = '/api1/eliza'
     ELEMENT = objectify.ElementMaker(annotate=False, nsmap={})
 
     def _game_command(self, game_id, node):
@@ -629,7 +633,7 @@ class ELIZA (ReadOnlyAPI):
             node = self._game_command(game_id, self.ELEMENT.build(
                     x=str(x), y=str(y), type_=str(type_)))
             return node.tag == 'ok'
-        except ELIZAError, e:
+        except ELIZAError as e:
             if e.node.text == 'Not enough credits.':
                 raise NotEnoughCredits(type_)
             if e.node.text == 'Not your terrain.':
@@ -657,7 +661,7 @@ class ELIZA (ReadOnlyAPI):
             coords = map(lambda node: self._parse_attrs(node, x=int, y=int), 
                          node.findall('coordinate'))
             return [(c.get('x'), c.get('y')) for c in coords]
-        except ELIZAError, e:
+        except ELIZAError:
             return []
         
     def attack_options(self, game_id, position, type_, moved=None):
@@ -674,7 +678,7 @@ class ELIZA (ReadOnlyAPI):
                 options.set('moved', str(moved))
             node = self._game_command(game_id, options)
             return node.tag == 'ok'
-        except ELIZAError, e:
+        except ELIZAError:
             return False
         
     def _unit_command(self, game_id, position, command, **kwargs):
@@ -686,7 +690,7 @@ class ELIZA (ReadOnlyAPI):
             unit = self.ELEMENT.unit(x=str(x), y=str(y))
             unit.append(getattr(self.ELEMENT, command)(**kwargs))
             return self._game_command(game_id, unit)
-        except ELIZAError, e:
+        except ELIZAError as e:
             if e.node.text == 'Not your Unit.':
                 raise NotYourUnit(x, y)
             # otherwise simply re-raise
@@ -900,7 +904,7 @@ def accept_invitation(username, key, game_id):
         api = ELIZA(username, key)
         node = api._simple_game_command(game_id, api.ACCEPT_INVITATION)
         return node.tag == 'ok'
-    except ELIZAError, e:
+    except ELIZAError as e:
         if e.node.text == 'You have already accepted the invitation.':
             return False
         else:
@@ -923,7 +927,7 @@ def decline_invitation(username, key, game_id):
         api = ELIZA(username, key)
         node = api._simple_game_command(game_id, api.DECLINE_INVITATION)
         return node.tag == 'ok'
-    except ELIZAError, e:
+    except ELIZAError as e:
         if e.node.text == 'Cannot decline an invitation.':
             return False
         else:
@@ -946,7 +950,7 @@ def send_reminder(username, key, game_id):
         api = ELIZA(username, key)
         node = api._simple_game_command(game_id, api.SEND_REMINDER)
         return node.tag == 'ok'
-    except ELIZAError, e:
+    except ELIZAError as e:
         if e.node.text == 'Can not remind current player.':
             return False
         else:
@@ -969,7 +973,7 @@ def surrender_game(username, key, game_id):
         api = ELIZA(username, key)
         node = api._simple_game_command(game_id, api.SURRENDER)
         return node.tag == 'ok'
-    except ELIZAError, e:
+    except ELIZAError as e:
         if e.node.text in ['Can not surrender.',
                            'Game is not running.']:
             return False
@@ -993,7 +997,7 @@ def abandon_game(username, key, game_id):
         api = ELIZA(username, key)
         node = api._simple_game_command(game_id, api.ABANDON)
         return node.tag == 'ok'
-    except ELIZAError, e:
+    except ELIZAError as e:
         if e.node.text == 'Game is not running.':
             return False
         else:
@@ -1016,7 +1020,7 @@ def remove_game(username, key, game_id):
         api = ELIZA(username, key)
         node = api._simple_game_command(game_id, api.REMOVE_GAME)
         return node.tag == 'ok'
-    except ELIZAError, e:
+    except ELIZAError as e:
         if e.node.text == 'Game has already been deleted.':
             return False
         else:

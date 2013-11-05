@@ -1,0 +1,301 @@
+{
+    "id": 18682,
+    "name": "Twins, Basil!",
+    "round": 21,
+    "state": "finished",
+    "pendingInvites": false,
+    "pace": 259200,
+    "type": "Pro",
+    "url": "http://weewar.com/game/18682",
+    "rated": true,
+    "since": "4 days 19 hours 34 minutes",
+    "players": [
+        {
+            "index": 0,
+            "current": true,
+            "result": "victory",
+            "username": "eviltwin"
+        },
+        {
+            "index": 1,
+            "current": false,
+            "result": "votedout",
+            "username": "thomas419"
+        }
+    ],
+    "disabledUnitTypes": [
+        "Anti Aircraft", "Assault Artillery", "Battleship", "Bomber",
+        "Destroyer", "Jet", "Helicopter", "Hovercraft", "Speedboat",
+        "Submarine", "DFA", "Berserker"
+    ],
+    "map": 1,
+    "mapUrl": "http://weewar.com/map/1",
+    "creditsPerBase": 200,
+    "initialCredits": 100,
+    "playingSince": "Sat Aug 08 15:17:28 UTC 2009",
+    "factions": [
+        {
+            "current": true,
+            "credits": 600,
+            "playerId": 12903,
+            "playerName": "eviltwin",
+            "state": "finished",
+            "result": "victory",
+            "units": [
+                {
+                    "x": 1,
+                    "y": 10,
+                    "type": "Light Artillery",
+                    "quantity": 7,
+                    "finished": false
+                }
+            ],
+            "terrain": [
+                {
+                    "x": 1,
+                    "y": 10,
+                    "type": "Base",
+                    "finished": false
+                }
+            ]
+        },
+        {
+            "current": false,
+            "playerId": 12911,
+            "playerName": "thomas419",
+            "state": "finished",
+            "result": "votedout",
+            "units": [
+                {
+                    "x": 2,
+                    "y": 10,
+                    "type": "Heavy Tank",
+                    "quantity": 4,
+                    "finished": false
+                },
+                {
+                    "x": 3,
+                    "y": 9,
+                    "type": "Tank",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 3,
+                    "y": 11,
+                    "type": "Heavy Trooper",
+                    "quantity": 5,
+                    "finished": false
+                },
+                {
+                    "x": 4,
+                    "y": 10,
+                    "type": "Heavy Artillery",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 5,
+                    "y": 9,
+                    "type": "Heavy Artillery",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 5,
+                    "y": 10,
+                    "type": "Heavy Artillery",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 5,
+                    "y": 11,
+                    "type": "Heavy Artillery",
+                    "quantity": 2,
+                    "finished": false
+                },
+                {
+                    "x": 6,
+                    "y": 8,
+                    "type": "Heavy Tank",
+                    "quantity": 7,
+                    "finished": false
+                },
+                {
+                    "x": 6,
+                    "y": 9,
+                    "type": "Heavy Tank",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 6,
+                    "y": 10,
+                    "type": "Heavy Artillery",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 6,
+                    "y": 11,
+                    "type": "Raider",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 7,
+                    "y": 7,
+                    "type": "Raider",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 7,
+                    "y": 8,
+                    "type": "Heavy Artillery",
+                    "quantity": 2,
+                    "finished": false
+                },
+                {
+                    "x": 7,
+                    "y": 12,
+                    "type": "Heavy Trooper",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 8,
+                    "y": 8,
+                    "type": "Heavy Tank",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 8,
+                    "y": 12,
+                    "type": "Heavy Tank",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 8,
+                    "y": 13,
+                    "type": "Heavy Artillery",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 9,
+                    "y": 11,
+                    "type": "Heavy Artillery",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 10,
+                    "y": 5,
+                    "type": "Heavy Artillery",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 10,
+                    "y": 6,
+                    "type": "Heavy Artillery",
+                    "quantity": 2,
+                    "finished": false
+                },
+                {
+                    "x": 10,
+                    "y": 7,
+                    "type": "Heavy Artillery",
+                    "quantity": 10,
+                    "finished": false
+                },
+                {
+                    "x": 10,
+                    "y": 10,
+                    "type": "Heavy Artillery",
+                    "quantity": 5,
+                    "finished": false
+                },
+                {
+                    "x": 11,
+                    "y": 9,
+                    "type": "Heavy Trooper",
+                    "quantity": 10,
+                    "finished": false
+                }
+            ],
+            "terrain": [
+                {
+                    "x": 6,
+                    "y": 10,
+                    "type": "Base",
+                    "finished": false
+                },
+                {
+                    "x": 7,
+                    "y": 6,
+                    "type": "Base",
+                    "finished": false
+                },
+                {
+                    "x": 8,
+                    "y": 14,
+                    "type": "Base",
+                    "finished": false
+                },
+                {
+                    "x": 9,
+                    "y": 9,
+                    "type": "Base",
+                    "finished": false
+                },
+                {
+                    "x": 9,
+                    "y": 10,
+                    "type": "Base",
+                    "finished": false
+                },
+                {
+                    "x": 10,
+                    "y": 10,
+                    "type": "Base",
+                    "finished": false
+                },
+                {
+                    "x": 11,
+                    "y": 6,
+                    "type": "Base",
+                    "finished": false
+                },
+                {
+                    "x": 11,
+                    "y": 13,
+                    "type": "Base",
+                    "finished": false
+                },
+                {
+                    "x": 13,
+                    "y": 1,
+                    "type": "Base",
+                    "finished": false
+                },
+                {
+                    "x": 13,
+                    "y": 9,
+                    "type": "Base",
+                    "finished": false
+                },
+                {
+                    "x": 14,
+                    "y": 18,
+                    "type": "Base",
+                    "finished": false
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+[
+    {
+        "id": 42640,
+        "name": "Somar's first map",
+        "initialCredits": 1000,
+        "perBaseCredits": 10,
+        "width": 20,
+        "height": 10,
+        "maxPlayers": 2,
+        "url": "http://weewar.com/map/42640",
+        "thumbnail": "http://weewar.com/images/maps/boardThumb_42640_ir1.png",
+        "preview": "http://weewar.com/images/maps/preview_42640_ir1.png",
+        "revision": 2,
+        "creator": "somar96",
+        "creatorProfile": "http://weewar.com/user/somar96"
+    },
+    {
+        "id": 42634,
+        "name": "Copy of Landing Point",
+        "initialCredits": 0,
+        "perBaseCredits": 300,
+        "width": 14,
+        "height": 14,
+        "maxPlayers": 2,
+        "url": "http://weewar.com/map/42634",
+        "thumbnail": "http://weewar.com/images/maps/boardThumb_42634_ir2.png",
+        "preview": "http://weewar.com/images/maps/preview_42634_ir2.png",
+        "revision": 2,
+        "creator": "Shulgin",
+        "creatorProfile": "http://weewar.com/user/Shulgin"
+    }
+]

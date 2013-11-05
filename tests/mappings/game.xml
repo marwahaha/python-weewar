@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game id="21885">
+    <id>21885</id>
+    <name>Another short one</name>
+    <round>36</round>
+    <state>finished</state>
+    <pendingInvites>false</pendingInvites>
+    <pace>86400</pace>
+    <type>Pro</type>
+    <url>http://weewar.com/game/21885</url>
+    <rated>true</rated>
+    <since>12 hours</since>
+    <players>
+        <player index="0" current="true" result="victory">eviltwin</player>
+        <player index="1" result="defeat">challenge</player>
+    </players>
+    <disabledUnitTypes>
+        <type>Anti Aircraft</type>
+        <type>Assault Artillery</type>
+        <type>Battleship</type>
+        <type>Bomber</type>
+        <type>Destroyer</type>
+        <type>Jet</type>
+        <type>Helicopter</type>
+        <type>Hovercraft</type>
+        <type>Speedboat</type>
+        <type>Submarine</type>
+        <type>DFA</type>
+        <type>Berserker</type>
+    </disabledUnitTypes>
+    <map>8</map>
+    <mapUrl>http://weewar.com/map/8</mapUrl>
+    <creditsPerBase>100</creditsPerBase>
+    <initialCredits>300</initialCredits>
+    <playingSince>Thu Jul 30 19:26:31 UTC 2009</playingSince>
+</game>

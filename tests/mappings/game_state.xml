@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game id="18682">
+    <id>18682</id>
+    <name>Twins, Basil!</name>
+    <round>21</round>
+    <state>finished</state>
+    <pendingInvites>false</pendingInvites>
+    <pace>259200</pace>
+    <type>Pro</type>
+    <url>http://weewar.com/game/18682</url>
+    <rated>true</rated>
+    <since>4 days 19 hours 34 minutes</since>
+    <players>
+        <player index="0" current="true" result="victory">eviltwin</player>
+        <player index="1" result="votedout">thomas419</player>
+    </players>
+    <disabledUnitTypes>
+        <type>Anti Aircraft</type>
+        <type>Assault Artillery</type>
+        <type>Battleship</type>
+        <type>Bomber</type>
+        <type>Destroyer</type>
+        <type>Jet</type>
+        <type>Helicopter</type>
+        <type>Hovercraft</type>
+        <type>Speedboat</type>
+        <type>Submarine</type>
+        <type>DFA</type>
+        <type>Berserker</type>
+    </disabledUnitTypes>
+    <map>1</map>
+    <mapUrl>http://weewar.com/map/1</mapUrl>
+    <creditsPerBase>200</creditsPerBase>
+    <initialCredits>100</initialCredits>
+    <playingSince>Sat Aug 08 15:17:28 UTC 2009</playingSince>
+    <factions>
+        <faction current="true" credits="600" playerId="12903"
+                 playerName="eviltwin" state="finished" result="victory">
+            <unit x="1" y="10" type="Light Artillery" quantity="7"
+                  finished="false"/>
+            <terrain x="1" y="10" type="Base" finished="false"/>
+        </faction>
+        <faction playerId="12911" playerName="thomas419" state="finished"
+                 result="votedout">
+            <unit x="2" y="10" type="Heavy Tank" quantity="4" finished="false"/>
+            <unit x="3" y="9" type="Tank" quantity="10" finished="false"/>
+            <unit x="3" y="11" type="Heavy Trooper" quantity="5"
+                  finished="false"/>
+            <unit x="4" y="10" type="Heavy Artillery" quantity="10"
+                  finished="false"/>
+            <unit x="5" y="9" type="Heavy Artillery" quantity="10"
+                  finished="false"/>
+            <unit x="5" y="10" type="Heavy Artillery" quantity="10"
+                  finished="false"/>
+            <unit x="5" y="11" type="Heavy Artillery" quantity="2"
+                  finished="false"/>
+            <unit x="6" y="8" type="Heavy Tank" quantity="7" finished="false"/>
+            <unit x="6" y="9" type="Heavy Tank" quantity="10" finished="false"/>
+            <unit x="6" y="10" type="Heavy Artillery" quantity="10"
+                  finished="false"/>
+            <unit x="6" y="11" type="Raider" quantity="10" finished="false"/>
+            <unit x="7" y="7" type="Raider" quantity="10" finished="false"/>
+            <unit x="7" y="8" type="Heavy Artillery" quantity="2"
+                  finished="false"/>
+            <unit x="7" y="12" type="Heavy Trooper" quantity="10"
+                  finished="false"/>
+            <unit x="8" y="8" type="Heavy Tank" quantity="10" finished="false"/>
+            <unit x="8" y="12" type="Heavy Tank" quantity="10"
+                  finished="false"/>
+            <unit x="8" y="13" type="Heavy Artillery" quantity="10"
+                  finished="false"/>
+            <unit x="9" y="11" type="Heavy Artillery" quantity="10"
+                  finished="false"/>
+            <unit x="10" y="5" type="Heavy Artillery" quantity="10"
+                  finished="false"/>
+            <unit x="10" y="6" type="Heavy Artillery" quantity="2"
+                  finished="false"/>
+            <unit x="10" y="7" type="Heavy Artillery" quantity="10"
+                  finished="false"/>
+            <unit x="10" y="10" type="Heavy Artillery" quantity="5"
+                  finished="false"/>
+            <unit x="11" y="9" type="Heavy Trooper" quantity="10"
+                  finished="false"/>
+            <terrain x="6" y="10" type="Base" finished="false"/>
+            <terrain x="7" y="6" type="Base" finished="false"/>
+            <terrain x="8" y="14" type="Base" finished="false"/>
+            <terrain x="9" y="9" type="Base" finished="false"/>
+            <terrain x="9" y="10" type="Base" finished="false"/>
+            <terrain x="10" y="10" type="Base" finished="false"/>
+            <terrain x="11" y="6" type="Base" finished="false"/>
+            <terrain x="11" y="13" type="Base" finished="false"/>
+            <terrain x="13" y="1" type="Base" finished="false"/>
+            <terrain x="13" y="9" type="Base" finished="false"/>
+            <terrain x="14" y="18" type="Base" finished="false"/>
+        </faction>
+    </factions>
+</game>
