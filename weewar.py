@@ -620,10 +620,11 @@ class ELIZA (ReadOnlyAPI):
         node = self._game_command(game_id, self.ELEMENT.chat(msg))
         return True
 
-    def build(self, game_id, (x, y), type_):
+    def build(self, game_id, position, type_):
         """
         Builds a unit are a specific location of the map.
         """
+        x, y = position
         try:
             node = self._game_command(game_id, self.ELEMENT.build(
                     x=str(x), y=str(y), type_=str(type_)))
@@ -643,11 +644,12 @@ class ELIZA (ReadOnlyAPI):
             # otherwise
             return False
         
-    def move_options(self, game_id, (x, y), type_):
+    def move_options(self, game_id, position, type_):
         """
         Requests unit movement options. This is pretty much like what you get 
         when you select a unit in a regular game.
         """
+        x, y = position
         try:
             options = self.ELEMENT.movementOptions(x=str(x), y=str(y), 
                                                  type=str(type_))
@@ -658,12 +660,13 @@ class ELIZA (ReadOnlyAPI):
         except ELIZAError, e:
             return []
         
-    def attack_options(self, game_id, (x, y), type_, moved=None):
+    def attack_options(self, game_id, position, type_, moved=None):
         """
         Requests possible targets. The 'moved' attribute is optional and 
         describes the number of turns a unit has already moved. This is helpful 
         for Jets and Battleships.
         """
+        x, y = position
         try:
             options = self.ELEMENT.attackOptions(
                 x=str(x), y=str(y), type=str(type_))
@@ -674,10 +677,11 @@ class ELIZA (ReadOnlyAPI):
         except ELIZAError, e:
             return False
         
-    def _unit_command(self, game_id, (x, y), command, **kwargs):
+    def _unit_command(self, game_id, position, command, **kwargs):
         """
-        Send a command to a unit at (x, y).
+        Send a command to a unit at position (x, y).
         """
+        x, y = position
         try:
             unit = self.ELEMENT.unit(x=str(x), y=str(y))
             unit.append(getattr(self.ELEMENT, command)(**kwargs))
@@ -1036,7 +1040,7 @@ def chat(username, key, game_id, msg):
     return api.chat(game_id, msg)
 
 
-def build_unit(username, key, game_id, (x, y), unit):
+def build_unit(username, key, game_id, position, unit):
     """
     Sends a chat message to the game board.
     :param username: weewar username
@@ -1045,18 +1049,16 @@ def build_unit(username, key, game_id, (x, y), unit):
     :type key: str
     :param game_id: Unique ID of weewar game.
     :type game_id: int
-    :param x: X-position on map.
-    :type x: int
-    :param y: Y-position on map.
-    :type y: int
+    :param position: position on map.
+    :type position: (int, int)
     :param unit: Unit type to build.
     :type unit: str
     """
     api = ELIZA(username, key)
-    return api.build(game_id, (x, y), unit)
+    return api.build(game_id, position, unit)
 
 
-def unit_move_options(username, key, game_id, unit, (x, y)):
+def unit_move_options(username, key, game_id, unit, position):
     """
     Requests unit movement options. This is pretty much like what you get 
     when you select a unit in a regular game.
@@ -1069,16 +1071,14 @@ def unit_move_options(username, key, game_id, unit, (x, y)):
     :type game_id: int
     :param unit: Unit type.
     :type unit: str
-    :param x: X-position on map.
-    :type x: int
-    :param y: Y-position on map.
-    :type y: int
+    :param position: position on map.
+    :type position: (int, int)
     """
     api = ELIZA(username, key)
-    return api.move_options(game_id, (x, y), unit)
+    return api.move_options(game_id, position, unit)
 
 
-def unit_attack_options(username, key, game_id, unit, (x, y), moved=None):
+def unit_attack_options(username, key, game_id, unit, position, moved=None):
     """
     Requests possible targets. The 'moved' attribute is optional and 
     describes the number of turns a unit has already moved. This is helpful 
@@ -1092,13 +1092,11 @@ def unit_attack_options(username, key, game_id, unit, (x, y), moved=None):
     :type game_id: int
     :param unit: Unit type.
     :type unit: str
-    :param x: X-position on map.
-    :type x: int
-    :param y: Y-position on map.
-    :type y: int
+    :param position: position on map.
+    :type position: (int, int)
     """
     api = ELIZA(username, key)
-    return api.attack_options(game_id, (x, y), unit, moved)
+    return api.attack_options(game_id, position, unit, moved)
 
 
 def move_unit(username, key, game_id, unit, from_, to):

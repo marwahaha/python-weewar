@@ -1170,12 +1170,12 @@ class TestELIZAMapping (TestXMLParsing):
 def compare(dict1, dict2):
     keys = set(dict1.keys()) & set(dict2.keys())
     if set(dict1.keys()) != keys:
-        print 'missing in dict1:', list(set(dict1.keys()) - keys)
+        print('missing in dict1:', list(set(dict1.keys()) - keys))
     if set(dict2.keys()) != keys:
-        print 'missing in dict2:', list(set(dict2.keys()) - keys)
+        print('missing in dict2:', list(set(dict2.keys()) - keys))
     for key in keys:
         if dict1[key] != dict2[key]:
-            print '__%s__\n  %r\n  %r' % (key, dict1[key], dict2[key])
+            print('__%s__\n  %r\n  %r' % (key, dict1[key], dict2[key]))
 
 if __name__ == '__main__':
     unittest.main()
