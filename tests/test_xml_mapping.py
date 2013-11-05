@@ -1,6 +1,7 @@
 import unittest
 from lxml import objectify
-from weewar.api import ReadOnlyAPI, ELIZA
+from weewar import ReadOnlyAPI, ELIZA
+
 
 class TestXMLParsing(unittest.TestCase):
 
@@ -57,19 +58,19 @@ class TestXMLParsing(unittest.TestCase):
         </users>
         """
         expected = [
-            {'name' : 'Watyousay', 'id' : 47874, 'rating' : 2213}, 
-            {'name' : 'Stirling', 'id' : 26468, 'rating' : 2114}, 
-            {'name' : 'ironcamel', 'id' : 1909, 'rating' : 2104}, 
-            {'name' : 'Mr_Clean', 'id' : 17562, 'rating' : 2050}, 
-            {'name' : 'elsirad', 'id' : 41192, 'rating' : 2050}, 
-            {'name' : 'jeye', 'id' : 6101, 'rating' : 2049}, 
-            {'name' : 'moJoe', 'id' : 4541, 'rating' : 2038}, 
-            {'name' : 'Juffe', 'id' : 43710, 'rating' : 2037}, 
-            {'name' : 'leelar', 'id' : 23263, 'rating' : 2018}, 
-            {'name' : 'Doughnonuthin', 'id' : 39655, 'rating' : 2017}, 
-            {'name' : 'General_Death', 'id' : 26235, 'rating' : 2001}, 
-            {'name' : 'Riipperi', 'id' : 43711, 'rating' : 1989}, 
-            {'name' : 'Aldairor', 'id' : 48371, 'rating' : 1968} 
+            {'name': 'Watyousay', 'id': 47874, 'rating': 2213}, 
+            {'name': 'Stirling', 'id': 26468, 'rating': 2114}, 
+            {'name': 'ironcamel', 'id': 1909, 'rating': 2104}, 
+            {'name': 'Mr_Clean', 'id': 17562, 'rating': 2050}, 
+            {'name': 'elsirad', 'id': 41192, 'rating': 2050}, 
+            {'name': 'jeye', 'id': 6101, 'rating': 2049}, 
+            {'name': 'moJoe', 'id': 4541, 'rating': 2038}, 
+            {'name': 'Juffe', 'id': 43710, 'rating': 2037}, 
+            {'name': 'leelar', 'id': 23263, 'rating': 2018}, 
+            {'name': 'Doughnonuthin', 'id': 39655, 'rating': 2017}, 
+            {'name': 'General_Death', 'id': 26235, 'rating': 2001}, 
+            {'name': 'Riipperi', 'id': 43711, 'rating': 1989}, 
+            {'name': 'Aldairor', 'id': 48371, 'rating': 1968} 
         ]
         self.api._call_api = lambda a: self.parsed_xml(xml)
         self.assertEqual(self.api.all_users(), expected) 
@@ -117,25 +118,25 @@ class TestXMLParsing(unittest.TestCase):
         </game>
         """
         expected = {
-            'id' : 21885, 
-            'name' : 'Another short one', 
-            'round' : 36, 
-            'state' : 'finished', 
-            'pendingInvites' : False, 
-            'pace' : 86400, 
-            'type' : 'Pro', 
-            'url' : 'http://weewar.com/game/21885', 
-            'rated' : True, 
-            'since' : '12 hours', 
-            'players' : [
-                {'index' : 0,  
-                 'current' : True, 
-                 'result' : 'victory', 
-                 'username' : 'eviltwin'},
-                {'index' : 1,
-                 'result' : 'defeat',
-                 'username' : 'challenge'}],
-            'disabledUnitTypes' : [
+            'id': 21885, 
+            'name': 'Another short one', 
+            'round': 36, 
+            'state': 'finished', 
+            'pendingInvites': False, 
+            'pace': 86400, 
+            'type': 'Pro', 
+            'url': 'http://weewar.com/game/21885', 
+            'rated': True, 
+            'since': '12 hours', 
+            'players': [
+                {'index': 0,  
+                 'current': True, 
+                 'result': 'victory', 
+                 'username': 'eviltwin'},
+                {'index': 1,
+                 'result': 'defeat',
+                 'username': 'challenge'}],
+            'disabledUnitTypes': [
                 'Anti Aircraft', 
                 'Assault Artillery', 
                 'Battleship', 
@@ -148,11 +149,11 @@ class TestXMLParsing(unittest.TestCase):
                 'Submarine', 
                 'DFA', 
                 'Berserker'],
-            'map' : 8, 
-            'mapUrl' : 'http://weewar.com/map/8', 
-            'creditsPerBase' : 100, 
-            'initialCredits' : 300, 
-            'playingSince' : 'Thu Jul 30 19:26:31 UTC 2009' 
+            'map': 8, 
+            'mapUrl': 'http://weewar.com/map/8', 
+            'creditsPerBase': 100, 
+            'initialCredits': 300, 
+            'playingSince': 'Thu Jul 30 19:26:31 UTC 2009' 
         }
         self.api._call_api = lambda a: self.parsed_xml(xml)
         self.assertEqual(self.api.game(12345), expected) 
@@ -194,21 +195,21 @@ class TestXMLParsing(unittest.TestCase):
         </user>
         """
         expected = {
-            'name' : 'eviltwin',
-            'id' : 12903,
-            'points' : 1531,
-            'profile' : 'http://weewar.com/user/eviltwin',
-            'draws' : 0,
-            'victories' : 2,
-            'losses' : 0,
-            'accountType' : 'Basic',
-            'on' : False,
-            'readyToPlay' : False, 
-            'gamesRunning' : 1, 
-            'lastLogin' : '2009-07-30 18:12:13.0', 
-            'basesCaptured' : 12, 
-            'creditsSpent' : 24750, 
-            'favoriteUnits' : [
+            'name': 'eviltwin',
+            'id': 12903,
+            'points': 1531,
+            'profile': 'http://weewar.com/user/eviltwin',
+            'draws': 0,
+            'victories': 2,
+            'losses': 0,
+            'accountType': 'Basic',
+            'on': False,
+            'readyToPlay': False, 
+            'gamesRunning': 1, 
+            'lastLogin': '2009-07-30 18:12:13.0', 
+            'basesCaptured': 12, 
+            'creditsSpent': 24750, 
+            'favoriteUnits': [
                 'tank', 
                 'heavyInfantry', 
                 'lightInfantry', 
@@ -216,11 +217,11 @@ class TestXMLParsing(unittest.TestCase):
                 'heavyartillery', 
                 'lighttank', 
                 'heavytank'], 
-            'preferredPlayers' : [], 
-            'games' : [
-                {'name' : 'Twins, Basil!', 'id' : 18682},
-                {'name' : 'Another short one', 'id' : 21885}],
-            'maps' : []
+            'preferredPlayers': [], 
+            'games': [
+                {'name': 'Twins, Basil!', 'id': 18682},
+                {'name': 'Another short one', 'id': 21885}],
+            'maps': []
         }
         self.api._call_api = lambda a: self.parsed_xml(xml)
         #compare(self.api.user(12345), expected) 
@@ -264,34 +265,34 @@ class TestXMLParsing(unittest.TestCase):
         """
         expected = [
             {
-                'id' : 42640,
-                'name' : "Somar's first map",
-                'initialCredits' : 1000, 
-                'perBaseCredits' : 10, 
-                'width' : 20, 
-                'height' : 10, 
-                'maxPlayers' : 2, 
-                'url' : 'http://weewar.com/map/42640', 
-                'thumbnail' : 'http://weewar.com/images/maps/boardThumb_42640_ir1.png', 
-                'preview' : 'http://weewar.com/images/maps/preview_42640_ir1.png', 
-                'revision' : 2, 
-                'creator' : 'somar96', 
-                'creatorProfile' : 'http://weewar.com/user/somar96'
+                'id': 42640,
+                'name': "Somar's first map",
+                'initialCredits': 1000, 
+                'perBaseCredits': 10, 
+                'width': 20, 
+                'height': 10, 
+                'maxPlayers': 2, 
+                'url': 'http://weewar.com/map/42640', 
+                'thumbnail': 'http://weewar.com/images/maps/boardThumb_42640_ir1.png', 
+                'preview': 'http://weewar.com/images/maps/preview_42640_ir1.png', 
+                'revision': 2, 
+                'creator': 'somar96', 
+                'creatorProfile': 'http://weewar.com/user/somar96'
             },
             {
-                'id' : 42634, 
-                'name' : 'Copy of Landing Point', 
-                'initialCredits' : 0, 
-                'perBaseCredits' : 300, 
-                'width' : 14, 
-                'height' : 14, 
-                'maxPlayers' : 2, 
-                'url' : 'http://weewar.com/map/42634', 
-                'thumbnail' : 'http://weewar.com/images/maps/boardThumb_42634_ir2.png', 
-                'preview' : 'http://weewar.com/images/maps/preview_42634_ir2.png', 
-                'revision' : 2, 
-                'creator' : 'Shulgin', 
-                'creatorProfile' : 'http://weewar.com/user/Shulgin'
+                'id': 42634, 
+                'name': 'Copy of Landing Point', 
+                'initialCredits': 0, 
+                'perBaseCredits': 300, 
+                'width': 14, 
+                'height': 14, 
+                'maxPlayers': 2, 
+                'url': 'http://weewar.com/map/42634', 
+                'thumbnail': 'http://weewar.com/images/maps/boardThumb_42634_ir2.png', 
+                'preview': 'http://weewar.com/images/maps/preview_42634_ir2.png', 
+                'revision': 2, 
+                'creator': 'Shulgin', 
+                'creatorProfile': 'http://weewar.com/user/Shulgin'
             }
         ]
         self.api._call_api = lambda a: self.parsed_xml(xml)
@@ -336,29 +337,29 @@ class TestXMLParsing(unittest.TestCase):
             1, 
             [
                 {
-                    'id' : 18682, 
-                    'inNeedOfAttention' : False, 
-                    'name' : 'Twins, Basil!', 
-                    'state' : 'running', 
-                    'since' : '3 minutes', 
-                    'rated' : True, 
-                    'link' : 'http://weewar.com/game/18682', 
-                    'url' : 'http://weewar.com/game/18682', 
-                    'map' : 1, 
-                    'factionState' : 'playing' 
+                    'id': 18682, 
+                    'inNeedOfAttention': False, 
+                    'name': 'Twins, Basil!', 
+                    'state': 'running', 
+                    'since': '3 minutes', 
+                    'rated': True, 
+                    'link': 'http://weewar.com/game/18682', 
+                    'url': 'http://weewar.com/game/18682', 
+                    'map': 1, 
+                    'factionState': 'playing' 
                 },
                 {
-                    'id' : 21885, 
-                    'inNeedOfAttention' : True, 
-                    'name' : 'Another short one', 
-                    'state' : 'finished', 
-                    'result' : 'victory', 
-                    'since' : '17 hours 36 minutes', 
-                    'rated' : True, 
-                    'link' : 'http://weewar.com/game/21885', 
-                    'url' : 'http://weewar.com/game/21885', 
-                    'map' : 8, 
-                    'factionState' : 'finished'
+                    'id': 21885, 
+                    'inNeedOfAttention': True, 
+                    'name': 'Another short one', 
+                    'state': 'finished', 
+                    'result': 'victory', 
+                    'since': '17 hours 36 minutes', 
+                    'rated': True, 
+                    'link': 'http://weewar.com/game/21885', 
+                    'url': 'http://weewar.com/game/21885', 
+                    'map': 8, 
+                    'factionState': 'finished'
                 }
             ]
         )
@@ -459,107 +460,107 @@ class TestELIZAMapping (TestXMLParsing):
         </game>
         """
         expected = {
-            'id' : 18682,
-            'name' : 'Twins, Basil!',
-            'round' : 21,
-            'state' : 'finished',
-            'pendingInvites' : False,
-            'pace' : 259200,
-            'type' : 'Pro',
-            'url' : 'http://weewar.com/game/18682',
-            'rated' : True,
-            'since' : '4 days 19 hours 34 minutes',
-            'players' : [
+            'id': 18682,
+            'name': 'Twins, Basil!',
+            'round': 21,
+            'state': 'finished',
+            'pendingInvites': False,
+            'pace': 259200,
+            'type': 'Pro',
+            'url': 'http://weewar.com/game/18682',
+            'rated': True,
+            'since': '4 days 19 hours 34 minutes',
+            'players': [
                 {
-                    'index' : 0, 
-                    'current' : True, 
-                    'result' : 'victory', 
-                    'username' : 'eviltwin'
+                    'index': 0, 
+                    'current': True, 
+                    'result': 'victory', 
+                    'username': 'eviltwin'
                 },
                 {
-                    'index' : 1, 
-                    'current' : False, 
-                    'result' : 'votedout', 
-                    'username' : 'thomas419'
+                    'index': 1, 
+                    'current': False, 
+                    'result': 'votedout', 
+                    'username': 'thomas419'
                 }
             ],
-            'disabledUnitTypes' : [
+            'disabledUnitTypes': [
                 'Anti Aircraft', 'Assault Artillery', 'Battleship', 'Bomber', 
                 'Destroyer', 'Jet', 'Helicopter', 'Hovercraft', 'Speedboat', 
                 'Submarine', 'DFA', 'Berserker',
             ],
-            'map' : 1,
+            'map': 1,
             'mapUrl': 'http://weewar.com/map/1', 
-            'creditsPerBase' : 200, 
-            'initialCredits' : 100, 
-            'playingSince' : 'Sat Aug 08 15:17:28 UTC 2009', 
-            'factions' : [
+            'creditsPerBase': 200, 
+            'initialCredits': 100, 
+            'playingSince': 'Sat Aug 08 15:17:28 UTC 2009', 
+            'factions': [
                 {
-                    'current' : True,
-                    'credits' : 600,
-                    'playerId' : 12903,
-                    'playerName' : 'eviltwin',
-                    'state' : 'finished', 
-                    'result' : 'victory',
-                    'units' : [
+                    'current': True,
+                    'credits': 600,
+                    'playerId': 12903,
+                    'playerName': 'eviltwin',
+                    'state': 'finished', 
+                    'result': 'victory',
+                    'units': [
                         {
-                            'x' : 1, 'y' : 10, 
-                            'type' : 'Light Artillery', 
-                            'quantity' : 7,
-                            'finished' : False
+                            'x': 1, 'y': 10, 
+                            'type': 'Light Artillery', 
+                            'quantity': 7,
+                            'finished': False
                         }
                     ],
-                    'terrain' : [
+                    'terrain': [
                         {
-                            'x' : 1, 'y' : 10,
-                            'type' : 'Base',
-                            'finished' : False
+                            'x': 1, 'y': 10,
+                            'type': 'Base',
+                            'finished': False
                         }
                     ]
                 },
                 {
-                    'current' : False,
-                    'playerId' : 12911,
-                    'playerName' : 'thomas419',
-                    'state' : 'finished', 
-                    'result' : 'votedout',
-                    'units' : [
-                        {'x' : 2, 'y' : 10, 'type' : 'Heavy Tank', 'quantity' : 4, 'finished' : False},
-                        {'x' : 3, 'y' : 9, 'type' : 'Tank', 'quantity' : 10, 'finished' : False},
-                        {'x' : 3, 'y' : 11, 'type' : 'Heavy Trooper', 'quantity' : 5, 'finished' : False},
-                        {'x' : 4, 'y' : 10, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
-                        {'x' : 5, 'y' : 9, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
-                        {'x' : 5, 'y' : 10, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
-                        {'x' : 5, 'y' : 11, 'type' : 'Heavy Artillery', 'quantity' : 2, 'finished' : False},
-                        {'x' : 6, 'y' : 8, 'type' : 'Heavy Tank', 'quantity' : 7, 'finished' : False},
-                        {'x' : 6, 'y' : 9, 'type' : 'Heavy Tank', 'quantity' : 10, 'finished' : False},
-                        {'x' : 6, 'y' : 10, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
-                        {'x' : 6, 'y' : 11, 'type' : 'Raider', 'quantity' : 10, 'finished' : False},
-                        {'x' : 7, 'y' : 7, 'type' : 'Raider', 'quantity' : 10, 'finished' : False},
-                        {'x' : 7, 'y' : 8, 'type' : 'Heavy Artillery', 'quantity' : 2, 'finished' : False},
-                        {'x' : 7, 'y' : 12, 'type' : 'Heavy Trooper', 'quantity' : 10, 'finished' : False},
-                        {'x' : 8, 'y' : 8, 'type' : 'Heavy Tank', 'quantity' : 10, 'finished' : False},
-                        {'x' : 8, 'y' : 12, 'type' : 'Heavy Tank', 'quantity' : 10, 'finished' : False},
-                        {'x' : 8, 'y' : 13, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
-                        {'x' : 9, 'y' : 11, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
-                        {'x' : 10, 'y' : 5, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
-                        {'x' : 10, 'y' : 6, 'type' : 'Heavy Artillery', 'quantity' : 2, 'finished' : False},
-                        {'x' : 10, 'y' : 7, 'type' : 'Heavy Artillery', 'quantity' : 10, 'finished' : False},
-                        {'x' : 10, 'y' : 10, 'type' : 'Heavy Artillery', 'quantity' : 5, 'finished' : False},
-                        {'x' : 11, 'y' : 9, 'type' : 'Heavy Trooper', 'quantity' : 10, 'finished' : False},
+                    'current': False,
+                    'playerId': 12911,
+                    'playerName': 'thomas419',
+                    'state': 'finished', 
+                    'result': 'votedout',
+                    'units': [
+                        {'x': 2, 'y': 10, 'type': 'Heavy Tank', 'quantity': 4, 'finished': False},
+                        {'x': 3, 'y': 9, 'type': 'Tank', 'quantity': 10, 'finished': False},
+                        {'x': 3, 'y': 11, 'type': 'Heavy Trooper', 'quantity': 5, 'finished': False},
+                        {'x': 4, 'y': 10, 'type': 'Heavy Artillery', 'quantity': 10, 'finished': False},
+                        {'x': 5, 'y': 9, 'type': 'Heavy Artillery', 'quantity': 10, 'finished': False},
+                        {'x': 5, 'y': 10, 'type': 'Heavy Artillery', 'quantity': 10, 'finished': False},
+                        {'x': 5, 'y': 11, 'type': 'Heavy Artillery', 'quantity': 2, 'finished': False},
+                        {'x': 6, 'y': 8, 'type': 'Heavy Tank', 'quantity': 7, 'finished': False},
+                        {'x': 6, 'y': 9, 'type': 'Heavy Tank', 'quantity': 10, 'finished': False},
+                        {'x': 6, 'y': 10, 'type': 'Heavy Artillery', 'quantity': 10, 'finished': False},
+                        {'x': 6, 'y': 11, 'type': 'Raider', 'quantity': 10, 'finished': False},
+                        {'x': 7, 'y': 7, 'type': 'Raider', 'quantity': 10, 'finished': False},
+                        {'x': 7, 'y': 8, 'type': 'Heavy Artillery', 'quantity': 2, 'finished': False},
+                        {'x': 7, 'y': 12, 'type': 'Heavy Trooper', 'quantity': 10, 'finished': False},
+                        {'x': 8, 'y': 8, 'type': 'Heavy Tank', 'quantity': 10, 'finished': False},
+                        {'x': 8, 'y': 12, 'type': 'Heavy Tank', 'quantity': 10, 'finished': False},
+                        {'x': 8, 'y': 13, 'type': 'Heavy Artillery', 'quantity': 10, 'finished': False},
+                        {'x': 9, 'y': 11, 'type': 'Heavy Artillery', 'quantity': 10, 'finished': False},
+                        {'x': 10, 'y': 5, 'type': 'Heavy Artillery', 'quantity': 10, 'finished': False},
+                        {'x': 10, 'y': 6, 'type': 'Heavy Artillery', 'quantity': 2, 'finished': False},
+                        {'x': 10, 'y': 7, 'type': 'Heavy Artillery', 'quantity': 10, 'finished': False},
+                        {'x': 10, 'y': 10, 'type': 'Heavy Artillery', 'quantity': 5, 'finished': False},
+                        {'x': 11, 'y': 9, 'type': 'Heavy Trooper', 'quantity': 10, 'finished': False},
                     ],
-                    'terrain' : [
-                        {'x' : 6, 'y' : 10, 'type' : 'Base', 'finished' : False},
-                        {'x' : 7, 'y' : 6, 'type' : 'Base', 'finished' : False},
-                        {'x' : 8, 'y' : 14, 'type' : 'Base', 'finished' : False},
-                        {'x' : 9, 'y' : 9, 'type' : 'Base', 'finished' : False},
-                        {'x' : 9, 'y' : 10, 'type' : 'Base', 'finished' : False},
-                        {'x' : 10, 'y' : 10, 'type' : 'Base', 'finished' : False},
-                        {'x' : 11, 'y' : 6, 'type' : 'Base', 'finished' : False},
-                        {'x' : 11, 'y' : 13, 'type' : 'Base', 'finished' : False},
-                        {'x' : 13, 'y' : 1, 'type' : 'Base', 'finished' : False},
-                        {'x' : 13, 'y' : 9, 'type' : 'Base', 'finished' : False},
-                        {'x' : 14, 'y' : 18, 'type' : 'Base', 'finished' : False},
+                    'terrain': [
+                        {'x': 6, 'y': 10, 'type': 'Base', 'finished': False},
+                        {'x': 7, 'y': 6, 'type': 'Base', 'finished': False},
+                        {'x': 8, 'y': 14, 'type': 'Base', 'finished': False},
+                        {'x': 9, 'y': 9, 'type': 'Base', 'finished': False},
+                        {'x': 9, 'y': 10, 'type': 'Base', 'finished': False},
+                        {'x': 10, 'y': 10, 'type': 'Base', 'finished': False},
+                        {'x': 11, 'y': 6, 'type': 'Base', 'finished': False},
+                        {'x': 11, 'y': 13, 'type': 'Base', 'finished': False},
+                        {'x': 13, 'y': 1, 'type': 'Base', 'finished': False},
+                        {'x': 13, 'y': 9, 'type': 'Base', 'finished': False},
+                        {'x': 14, 'y': 18, 'type': 'Base', 'finished': False},
                     ]
                 }
             ]
