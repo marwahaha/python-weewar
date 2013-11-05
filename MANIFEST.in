@@ -4,4 +4,4 @@ include MANIFEST.in
 include README.rst
 include CHANGES
 include tox.ini
-recursive-include tests *.py *.xml
+recursive-include tests *.py *.xml *.json
