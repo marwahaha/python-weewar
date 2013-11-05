@@ -139,8 +139,8 @@ class ReadOnlyAPI (object):
         including their current ranking.
         """
         root = self._call_api(self.URL_ALL_USERS)
-        return map(lambda node: self._parse_attrs(node, id=int,
-            name=str, rating=int), root.findall('user'))
+        return [self._parse_attrs(node, id=int, name=str, rating=int)
+                for node in root.findall('user')]
 
     URL_USER = '/api1/user/%s'
 
@@ -164,7 +164,7 @@ class ReadOnlyAPI (object):
         and other details.
         """
         root = self._call_api(self.URL_LATEST_MAPS)
-        return map(self._parse_map, root.findall('map'))
+        return [self._parse_map(map) for map in root.findall('map')]
 
     URL_HEADQUARTER = '/api1/headquarters'
 
@@ -183,7 +183,7 @@ class ReadOnlyAPI (object):
                 for child in node.iterchildren())
             game['inNeedOfAttention'] = node.get('inNeedOfAttention') == 'true'
             return game
-        games = map(_parse, root.findall('game'))
+        games = [_parse(gm) for gm in root.findall('game')]
         return {'needAttention': need_attention, 'games': games}
 
     def _parse_game(self, node):
@@ -509,22 +509,25 @@ class ELIZA (ReadOnlyAPI):
             values['username'] = node.pyval
             return values
 
-        values['players'] = map(_parse_player, node.players.iterchildren())
+        values['players'] = [
+            _parse_player(nd) for nd in node.players.iterchildren()]
 
-        _parse_unit = lambda node: self._parse_attrs(node, x=int, y=int, 
-                                    type=str, quantity=int, finished=bool)
-        _parse_terrain = lambda node: self._parse_attrs(node, x=int, y=int, 
-                                    type=str, finished=bool)
+        _parse_unit = lambda node: self._parse_attrs(
+            node, x=int, y=int, type=str, quantity=int, finished=bool)
+        _parse_terrain = lambda node: self._parse_attrs(
+            node, x=int, y=int,  type=str, finished=bool)
 
         def _parse_faction(node):
-            values = self._parse_attrs(node, playerId=int, playerName=str, 
-                                        credits=int, state=str, current=bool, 
-                                        result=str)
-            values['units'] = map(_parse_unit, node.findall('unit'))
-            values['terrain'] = map(_parse_terrain, node.findall('terrain'))
+            values = self._parse_attrs(
+                node, playerId=int, playerName=str, credits=int,
+                state=str, current=bool, result=str)
+            values['units'] = [_parse_unit(nd) for nd in node.findall('unit')]
+            values['terrain'] = [
+                _parse_terrain(nd) for nd in node.findall('terrain')]
             return values
 
-        values['factions'] = map(_parse_faction, node.factions.iterchildren())
+        values['factions'] = [
+            _parse_faction(nd) for nd in node.factions.iterchildren()]
 
         return values 
 
@@ -579,7 +582,8 @@ class ELIZA (ReadOnlyAPI):
         values['id'] = int(node.get('id'))
         _parse_terrain = lambda node: self._parse_attrs(node, x=int, y=int, 
                 type=str, startUnit=str, startUnitOwner=str, startFaction=int)
-        values['terrains'] = map(_parse_terrain, node.terrains.iterchildren())
+        values['terrains'] = [
+            _parse_terrain(nd) for nd in node.terrains.iterchildren()]
         return values
 
     URL_ELIZA_COMMANDS = '/api1/eliza'
