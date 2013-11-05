@@ -1,11 +1,10 @@
-.svn
 build
 dist
 python_weewar.egg-info
 
+.idea
 .project
 .pydevproject
 
-syntax: glob
 *.pyc
 *.pyo
