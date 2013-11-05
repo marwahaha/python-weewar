@@ -25,7 +25,7 @@ setup(
     long_description=read('README'),
     author="Sebastian Rahlf",
     author_email="basti AT redtoad DOT de",
-    url="http://bitbucket.org/basti/python-weewar/downloads/",
+    url="http://github.com/redtoad/python-weewar/",
     license='lgpl',
     py_modules=['weewar'],
     install_requires=[
