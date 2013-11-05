@@ -22,7 +22,7 @@ setup(
     name="python-weewar",
     version=version(),
     description="Python wrapper for the Weewar XML API",
-    long_description=read('README'),
+    long_description=read('README.rst'),
     author="Sebastian Rahlf",
     author_email="basti AT redtoad DOT de",
     url="http://github.com/redtoad/python-weewar/",
