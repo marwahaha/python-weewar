@@ -58,7 +58,7 @@ ELIZA API):
 
 - ``surrender_game(username, apikey, id)`` surrenders!
 
-- ``abandon_game(username, apikey, id)`` abondons a game.
+- ``abandon_game(username, apikey, id)`` abandons a game.
 
 - ``remove_game(username, apikey, id)`` removes a game.
 
